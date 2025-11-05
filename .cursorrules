@@ -1,0 +1,553 @@
+# Cato Hansen Agency - Cursor Rules v2.0
+# Intelligent Universal System Optimizer
+# META-PROMPT v4 Enhanced
+
+## 🎯 PROJECT CONTEXT
+This is a world-class portfolio website for Cato Hansen - AI Expert, System Architect, and Web Designer. The site includes an enterprise-grade admin panel with **modular architecture** where EVERY module is:
+- ✅ **Modular** - Can be extracted and sold separately
+- ✅ **Standalone** - Works independently
+- ✅ **Reusable** - Can be used in other projects
+- ✅ **Salable** - Can be published as NPM package (like Cerbos does)
+- ✅ **Production-Ready** - No mock/test data, fully optimized
+
+## 🤖 MULTI-AGENT APPROACH (CRITICAL)
+Cursor operates as a multi-agent team that ALWAYS follows this workflow:
+
+### ⚙️ PHASE 1 — ANALYSIS & PREPARATION (ALWAYS DO FIRST)
+Before writing ANY code, you MUST:
+
+1️⃣ **Read and Understand** the entire module, file, or page (API, component, database connection)
+
+2️⃣ **Map Existing System**:
+   - Existing functions, hooks, and API endpoints
+   - Duplicates, unused functions, or test data
+   - Missing API routes, logic, or data handling
+   - Performance bottlenecks, errors, or missing observability
+   - Connections between backend ↔ frontend ↔ AI-agents ↔ policy-system
+
+3️⃣ **Create Internal System Map**:
+   - Data models / ORM (Prisma schema)
+   - Policy rules (Hansen Security)
+   - Configuration and internal connections
+
+4️⃣ **Remove ALL Mock/Test Data**:
+   - NO `mockData`, `testData`, `dummy`, `placeholder`, `hardcoded` values
+   - NO `// TODO: Implement with Prisma` without actual implementation
+   - NO `// In production, fetch from database` - DO IT NOW
+   - Replace ALL mock data with real database queries or API calls
+
+### 🧩 PHASE 2 — IMPLEMENTATION & OPTIMIZATION
+
+#### BACKEND-AI (Your Backend Agent)
+- ✅ Remove mock/test data - replace with real database queries
+- ✅ Implement missing API endpoints automatically
+- ✅ Add real-time features via event streams and reactive backends
+- ✅ Run performance tests before and after improvements
+- ✅ Implement concepts from "Modern SaaS Back-End Functions" (see below)
+
+#### FRONTEND-AI (Your Frontend Agent)
+- ✅ Optimize UX with lazy/prefetch loading, live updates, SSE/WebSocket
+- ✅ Reduce DOM work and memory usage
+- ✅ Connect frontend components to backend efficiently without duplicates
+- ✅ Remove excessive state, logging, and error rendering
+
+#### SECURITY-AI (Your Security Agent)
+- ✅ Verify authentication and access (Hansen Security RBAC/PBAC)
+- ✅ Encrypt sensitive data (field-level)
+- ✅ Add audit logs and immutable ledger for financial data
+- ✅ Remove hardcoded data and secure keys, tokens, secrets
+- ✅ NO hardcoded passwords (even for development)
+
+#### ANALYTICS-AI (Your Analytics Agent)
+- ✅ Create real-time observability for APIs, AI agents, and user flow
+- ✅ Add logging of system performance and cache efficiency
+- ✅ Automatically create missing reporting endpoints
+
+#### OBSERVABILITY-AI (Your Observability Agent)
+- ✅ Implement self-diagnostic hooks and health checks
+- ✅ Log time spent, errors, cache-hit-rate, and latency for each API
+- ✅ Build auto-analysis of errors and alerts for developers
+
+### 🔍 PHASE 3 — DUPLICATE CONTROL & INTEGRITY (ALWAYS CHECK FIRST)
+Before creating NEW code:
+- ✅ Search for existing functions BEFORE creating new ones
+- ✅ Upgrade existing instead of creating duplicates
+- ✅ Ensure connections (API, model, policy, UI) are intact after changes
+- ✅ Test all contract compatibility (input/output schema)
+
+### 🧪 PHASE 4 — API & DATA HANDLING (ALWAYS VERIFY)
+For every module:
+- ✅ Map ALL API endpoints related to this module
+- ✅ Verify method (GET, POST, PUT, PATCH, DELETE)
+- ✅ Document and validate schema (input/output)
+- ✅ Create missing API endpoints automatically, test response and status codes
+- ✅ Optimize queries: use async, batch, stream, or prefetch when possible
+- ✅ Ensure logging and audit for each API call
+
+### 🚀 PHASE 5 — EXECUTION & REPORTING
+1️⃣ Execute improvements step-by-step and explain what changed and why
+
+2️⃣ Document results at the end of each module:
+   "✅ Upgraded {module} — {n} errors fixed, {m}% better performance, {x} new APIs created."
+
+3️⃣ Update Knowledge Base and changelog with short summary
+
+### 🔒 PHASE 6 — VERIFICATION & TEST (ALWAYS BEFORE COMMIT)
+- ✅ Run real-time tests on APIs and components
+- ✅ Verify policy and data flow
+- ✅ Test latency, load time, resource usage, cache-hit-rate
+- ✅ Log results and learning points for next improvement round
+
+### 🧠 PHASE 7 — CONTEXT UNDERSTANDING & SUGGESTION OPTIMIZATION
+For each concept from "Modern SaaS Functions" below:
+- → Evaluate if relevant for the module
+- → If yes, implement safely
+- → If no, skip and document why
+
+---
+
+## 🧩 MODULE-BASED ARCHITECTURE (CRITICAL)
+
+### ALL code must be modular:
+- ✅ Every feature must be in a module
+- ✅ Every module must be standalone
+- ✅ Every module must have its own SDK
+- ✅ Every module must be publishable as NPM package
+- ✅ Modules can be sold separately or bundled
+- ✅ NO mock data in modules - production-ready only
+
+### Module Structure:
+```
+src/modules/[module-name]/
+├── core/               # Core functionality
+├── api/                # API routes
+├── components/         # React components
+├── sdk/                # SDK for external use
+├── dashboard/          # Admin dashboard (if applicable)
+├── README.md           # Module documentation
+├── LICENSE.md          # License (MIT/Proprietary)
+├── package.json        # NPM package config
+└── MODULE_INFO.json    # Module metadata
+```
+
+### Module Types:
+1. **Hansen Security** - Authorization system (sellable like Cerbos)
+2. **User Management** - User authentication & management (sellable)
+3. **AI Agents** - AI automation system (sellable or open source)
+4. **Content Management** - CMS module (sellable)
+5. **Client Management** - CRM module (sellable)
+6. **Project Management** - Project tracking (sellable)
+7. **Billing System** - Payment & invoicing (sellable)
+8. **Analytics** - Analytics module (sellable)
+9. **Shared Utilities** - Open source utilities
+
+### Module Rules:
+- **Always** design modules to be extractable
+- **Always** include SDK for external use
+- **Always** document module API
+- **Always** make modules standalone (minimal dependencies)
+- **Never** create tight coupling between modules
+- **Always** use interfaces for module communication
+- **Never** include mock/test data in production code
+
+---
+
+## 🏗️ ARCHITECTURE PRINCIPLES
+
+### Technology Stack
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Authorization**: Hansen Security (our own module)
+- **Payments**: Stripe (Billing System module)
+- **Database**: Prisma ORM + Postgres (Neon/Supabase)
+- **Cache/Queues**: Upstash Redis (for rate limits, queues)
+- **AI**: OpenAI, Hugging Face (AI Agents module)
+- **Auth**: NextAuth.js (User Management module)
+
+### Module Integration:
+- Use module SDKs for integration
+- Never import module internals directly
+- Always use module interfaces
+- Load modules dynamically when possible
+
+---
+
+## ⚡ MODERN SAAS BACK-END FUNCTIONS & CONCEPTS (AUTO-EVALUATION LIST)
+
+When implementing code, evaluate and implement these concepts where relevant:
+
+### 🧠 Data & Computation
+- **Aggregated Data**: Combined results from multiple data sources
+- **Event-Driven Architecture**: System reacts automatically to events
+- **Asynchronous Processing**: Background processes without blocking UI
+- **Incremental Computation**: Calculate only changed parts
+- **Predictive Caching / Live Loading**: Dynamic cache and real-time updates
+- **Data Sharding / Partitioning**: Split data for performance and security
+- **Data Lineage & Audit Trail**: Traceability of all changes
+- **Immutable Logs / Ledger**: Tamper-evident log of transactions
+
+### 🔄 Integration & AI Automation
+- **Multi-Agent Orchestration**: Multiple AI agents collaborate autonomously
+- **AIOps / Observability Pipelines**: Automatic system and AI monitoring
+- **Retrieval-Augmented Generation (RAG)**: Combines databases and AI for contextual answers
+- **Autonomous Task Scheduling**: System plans actions itself
+- **Data Fusion**: Combine structured and unstructured data
+- **Guardrails & Ethical Filters**: AI follows predefined ethical rules
+- **Self-Healing Processes**: Automatic recovery from failures
+
+### ⚡ Performance & Scalability
+- **Lazy Loading**: Load data only when needed
+- **Prefetching**: Preload data based on user behavior
+- **Edge Computing**: Computations near the user
+- **Function-as-a-Service (FaaS)**: Small serverless functions
+- **Adaptive Throttling**: Dynamic speed control
+- **Batch vs Stream Processing**: Periodic vs real-time handling
+
+### 🔐 Security & Compliance
+- **Zero-Trust Architecture**: No implicit trust between modules
+- **Field-Level Encryption**: Encryption at field level
+- **Policy-Based Access Control (PBAC)**: Dynamic access based on context
+- **Federated Learning**: AI learns without sharing personal data
+- **Audit-Ready Logs**: Full documentation for supervision
+
+### 🧩 DevOps & Observability
+- **CI/CD**: Automatic test and deployment
+- **Telemetry & Tracing**: Monitor query flow
+- **Infrastructure-as-Code (IaC)**: Infrastructure defined in code
+- **Config-as-Data**: Settings stored in DB
+- **Hot Reload / Live Migration**: Updates without downtime
+
+---
+
+## 🚀 DEVELOPMENT GUIDELINES
+
+### Components
+- Use `'use client'` only when necessary
+- Prefer server components when possible
+- Use dynamic imports for modules
+- Implement proper loading states
+- Remove ALL mock/test data
+
+### API Routes
+- Validate all inputs (Zod)
+- Use Hansen Security for authorization
+- Return consistent error formats
+- Implement proper error handling
+- Log all API calls for observability
+- NO mock data - use real database queries
+
+### Module Integration:
+- Always use module SDKs
+- Never access module internals
+- Use dependency injection
+- Support lazy loading
+
+---
+
+## 🎨 DESIGN PRINCIPLES
+
+### UI/UX
+- **Modern**: Glassmorphism, gradients, smooth animations
+- **Responsive**: Mobile-first approach
+- **Accessible**: WCAG 2.1 AA compliance
+- **Performance**: Optimize for Core Web Vitals
+- **Consistent**: Use design system components
+
+### Admin Panel
+- **Intuitive**: Self-explanatory navigation
+- **Efficient**: Minimal clicks to complete tasks
+- **Beautiful**: Professional, enterprise-grade design
+- **Fast**: Lazy loading, caching, optimized renders
+- **Command Palette**: ⌘K for quick navigation
+
+---
+
+## 🔒 SECURITY
+
+### Authorization
+- Use **Hansen Security** for all authorization decisions
+- Never hardcode permissions in components
+- Always check permissions before rendering
+- Audit all authorization checks
+
+### Best Practices
+- Validate all inputs (Zod)
+- Sanitize user content
+- Use parameterized queries (Prisma)
+- Implement rate limiting (Upstash Redis)
+- Add security headers
+- 2FA for admin accounts
+- NO hardcoded passwords or secrets
+- Encrypt sensitive data at field level
+
+---
+
+## 🤖 AI & AUTOMATION
+
+### AI Agents
+- **ContentAgent**: SEO optimization, alt text generation
+- **ClientAgent**: Auto-responses, follow-ups
+- **InvoiceAgent**: Auto-invoicing, payment reminders
+- **ProjectAgent**: Status updates, deadline tracking
+
+### Agent Patterns
+- Use orchestrator pattern for multi-agent workflows
+- Implement error handling and retries
+- Log all agent actions for audit
+- Make agents idempotent when possible
+
+---
+
+## 💳 PAYMENTS & BILLING
+
+### Stripe Integration
+- Use Stripe API for all payments
+- Implement webhook handlers properly
+- Store payment intents securely
+- Handle failed payments gracefully
+
+### Invoice Management
+- Generate invoices automatically
+- Send payment reminders
+- Track payment status
+- Generate revenue reports
+
+---
+
+## 📝 DOCUMENTATION
+
+### Code Comments
+- Document complex logic
+- Explain "why" not "what"
+- Use JSDoc for functions
+- Keep comments up-to-date
+
+### README Files
+- Document setup instructions
+- Explain architecture decisions
+- Include examples
+- Keep it concise
+
+---
+
+## 🧪 TESTING
+
+### Unit Tests
+- Test business logic
+- Test utility functions
+- Mock external dependencies (only in tests, not production)
+
+### Integration Tests
+- Test API routes
+- Test authorization flows
+- Test payment flows
+
+---
+
+## ⚡ PERFORMANCE
+
+### Optimization
+- Use `next/dynamic` for code splitting
+- Optimize images with `next/image`
+- Implement caching strategies
+- Monitor Core Web Vitals
+
+### Caching
+- Cache API responses when appropriate
+- Use ISR for static content
+- Implement client-side caching
+- Clear cache when needed
+
+---
+
+## 🎯 AGENCY-SPECIFIC
+
+### Content Management
+- Easy editing of all website sections
+- Visual page builder (future)
+- SEO optimization tools
+- Media library management
+
+### Client Management
+- Client CRM integration
+- Project tracking
+- Communication logs
+- Document storage
+
+### Project Management
+- Project dashboard
+- Task management
+- Time tracking (optional)
+- Milestone tracking
+
+---
+
+## 💰 MODULE SALES STRATEGY
+
+### Modules as Products:
+- **Hansen Security**: Sell as authorization service (like Cerbos)
+- **User Management**: Sell as auth service
+- **AI Agents**: Sell or open source
+- **Content Management**: Sell as CMS
+- **Client Management**: Sell as CRM
+- **Project Management**: Sell as project tool
+- **Billing System**: Sell as billing service
+- **Analytics**: Sell as analytics service
+
+### Pricing Models:
+- **Free Tier**: Limited usage
+- **Starter**: NOK 499/month
+- **Professional**: NOK 1,999/month
+- **Enterprise**: Custom pricing
+
+---
+
+## 🔍 CODE SEARCH PATTERNS
+
+When searching for patterns, look for:
+- `@module` - Module-related code
+- `@hansen-security` - Hansen Security module
+- `@user-management` - User management module
+- `@ai-agents` - AI agents module
+- `@billing` - Billing module
+- `@stripe` - Payment integration
+- `@agent` - AI agent code
+- `@automation` - Automation rules
+- `@admin` - Admin panel code
+
+---
+
+## ⚠️ CRITICAL RULES (ALWAYS FOLLOW)
+
+1. **NO MOCK DATA**: Remove ALL `mockData`, `testData`, `dummy`, `placeholder`, `hardcoded` values
+2. **NO TODOs**: Implement features, don't leave TODO comments without implementation
+3. **ALWAYS CHECK FIRST**: Search for existing functions before creating new ones
+4. **PRODUCTION-READY**: All code must be production-ready, not just demo
+5. **OBSERVABILITY**: Log all API calls, errors, and performance metrics
+6. **SECURITY FIRST**: No hardcoded secrets, passwords, or tokens
+7. **MODULAR**: Every feature must be in a module
+8. **DOCUMENT**: Explain what and why, not just how
+9. **COPYRIGHT**: ALL new files MUST include copyright notice with "Cato Hansen. All rights reserved." + PROPRIETARY license
+
+---
+
+## © COPYRIGHT & LICENSING (CRITICAL)
+
+### Copyright Notice Requirements
+- ✅ **ALL new files** MUST include copyright notice at the top
+- ✅ **Copyright format** for TypeScript/JavaScript files:
+  ```typescript
+  /**
+   * Copyright (c) 2025 Cato Hansen. All rights reserved.
+   * 
+   * Proprietary - Unauthorized copying, modification, distribution, or use
+   * of this software, via any medium is strictly prohibited without express
+   * written permission from Cato Hansen.
+   * 
+   * @license PROPRIETARY
+   * SPDX-License-Identifier: PROPRIETARY
+   * @author Cato Hansen
+   * @contact cato@catohansen.no
+   * @website www.catohansen.no
+   */
+  ```
+- ✅ **Copyright format** for Markdown files:
+  ```markdown
+  <!--
+  Copyright (c) 2025 Cato Hansen. All rights reserved.
+  
+  Proprietary - Unauthorized copying, modification, distribution, or use
+  of this software, via any medium is strictly prohibited without express
+  written permission from Cato Hansen.
+  
+  License: PROPRIETARY
+  Author: Cato Hansen
+  Contact: cato@catohansen.no
+  Website: www.catohansen.no
+  -->
+  ```
+- ✅ **SPDX License Identifier**: Include for clarity
+  Example: `// SPDX-License-Identifier: PROPRIETARY`
+
+### Copyright Template (Default - Most Secure)
+When creating new files, use this EXACT template:
+```typescript
+/**
+ * Copyright (c) 2025 Cato Hansen. All rights reserved.
+ * 
+ * Proprietary - Unauthorized copying, modification, distribution, or use
+ * of this software, via any medium is strictly prohibited without express
+ * written permission from Cato Hansen.
+ * 
+ * @license PROPRIETARY
+ * SPDX-License-Identifier: PROPRIETARY
+ * @author Cato Hansen
+ * @contact cato@catohansen.no
+ * @website www.catohansen.no
+ */
+```
+
+### Module-Specific Copyright
+- **Default (Most Files)**: "Cato Hansen. All rights reserved." + PROPRIETARY
+- **Hansen Security Module**: "Cato Hansen. All rights reserved." + PROPRIETARY (commercial product)
+- **Sellable Modules**: "Cato Hansen. All rights reserved." + PROPRIETARY
+- **Future Open Source Modules**: Use MIT license only if explicitly stated
+
+### License Types
+1. **PROPRIETARY (Default - Most Secure)** ✅
+   - All rights reserved
+   - No copying, modification, or distribution without permission
+   - Commercial use only with written agreement
+   - Use for all internal and commercial modules
+
+2. **MIT (Only if explicitly needed)**
+   - Open source, permissive license
+   - Only use if module is explicitly intended to be open source
+   - Must include full MIT license text
+
+### When to Include Copyright
+- ✅ **ALWAYS** for new code files (TypeScript, JavaScript, etc.)
+- ✅ **ALWAYS** for documentation files (.md)
+- ✅ **ALWAYS** for configuration files (with comments)
+- ✅ **ALWAYS** for modules that will be sold separately
+- ✅ **ALWAYS** for proprietary/commercial code
+
+### Copyright Year Management
+- Use current year (2025) for new files
+- Update year when making significant changes: `2024-2025`
+- For files spanning multiple years: `2024-2025`
+
+---
+
+## 📝 DOCUMENTATION
+
+### Documentation Structure (CRITICAL)
+- ✅ **ALL .md files** (except `README.md` in root) MUST be placed in `docs/` directory
+- ✅ **Documentation Categories**:
+  - `docs/architecture/` - Architecture docs, status updates, system design
+  - `docs/guides/` - User guides, setup instructions, deployment guides
+  - `docs/reports/` - Optimization reports, upgrade reports, analysis
+  - `docs/modules/` - Module-specific documentation (optional, can use `src/modules/[module]/README.md` instead)
+- ✅ **When creating new .md files**: Always place in appropriate `docs/` subdirectory
+- ✅ **When referencing documentation**: Always reference from `docs/` path, e.g., `docs/guides/QUICK_START.md`
+- ✅ **README.md in root**: Keep only project README.md in root (main project documentation)
+- ✅ **Module README.md**: Can stay in `src/modules/[module]/README.md` for module-specific docs
+- ✅ **NEVER create .md files in root** (except README.md) - Always use `docs/` structure
+
+### Code Comments
+- Document complex logic
+- Explain "why" not "what"
+- Use JSDoc for functions
+- Keep comments up-to-date
+
+### README Files
+- Document setup instructions
+- Explain architecture decisions
+- Include examples
+- Keep it concise
+
+---
+
+**Remember: EVERYTHING is a module that can be sold separately! Build modules, not monolithic code! Production-ready code, not demos! 🚀**

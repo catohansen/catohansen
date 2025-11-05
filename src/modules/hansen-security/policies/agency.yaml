@@ -1,0 +1,45 @@
+# Hansen Security Policies for Cato Hansen Agency
+# Fine-grained access control for agency admin panel
+# This is our own policy system - Hansen Security
+
+# Content resource policy
+resource: "content"
+actions: ["read", "write", "delete"]
+roles: ["OWNER", "ADMIN", "EDITOR"]
+# EDITOR can write to content, but OWNER/ADMIN have full access
+
+# Project resource policy
+resource: "project"
+actions: ["read", "write", "delete", "create"]
+roles: ["OWNER", "ADMIN", "EDITOR"]
+# All authenticated users can read projects
+
+# Client resource policy
+resource: "client"
+actions: ["read", "write", "delete", "create"]
+roles: ["OWNER", "ADMIN"]
+# Only OWNER and ADMIN can manage clients
+
+# Invoice resource policy
+resource: "invoice"
+actions: ["read", "write", "delete", "create", "send"]
+roles: ["OWNER", "ADMIN"]
+# Only OWNER and ADMIN can manage invoices
+
+# Settings resource policy
+resource: "settings"
+actions: ["read", "write"]
+roles: ["OWNER", "ADMIN"]
+# Only OWNER and ADMIN can manage settings
+
+# Security resource policy
+resource: "security"
+actions: ["*"]
+roles: ["OWNER"]
+# Only OWNER has full security access
+
+# Dashboard resource policy
+resource: "dashboard"
+actions: ["read"]
+roles: ["OWNER", "ADMIN", "EDITOR", "CLIENT"]
+# All authenticated users can view dashboard

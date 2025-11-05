@@ -1,0 +1,55 @@
+{
+  "id": "ai-agents",
+  "name": "ai-agents",
+  "displayName": "Hansen AI Agents Framework",
+  "version": "1.0.0",
+  "description": "Intelligent AI agents for automation: ContentAgent, ClientAgent, InvoiceAgent, ProjectAgent",
+  "category": "automation",
+  "status": "active",
+  "author": "Cato Hansen",
+  "license": "PROPRIETARY",
+  "tags": ["ai", "automation", "agents", "machine-learning"],
+  "dependencies": ["nora", "client-management", "content-management"],
+  "features": [
+    "ContentAgent - SEO optimization, alt-text generation",
+    "ClientAgent - Auto-responses, follow-ups",
+    "InvoiceAgent - Auto-invoicing, payment reminders",
+    "ProjectAgent - Status updates, deadline tracking",
+    "Agent orchestration",
+    "Learning from feedback",
+    "Hansen Security integration"
+  ],
+  "pricing": {
+    "model": "subscription",
+    "plans": {
+      "professional": {
+        "name": "Professional",
+        "price": 1999,
+        "currency": "NOK",
+        "interval": "month",
+        "features": ["All 4 agents", "Unlimited actions", "Priority support"]
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "custom",
+        "currency": "NOK",
+        "features": ["All agents", "Custom agents", "Dedicated support", "SLA"]
+      }
+    }
+  },
+  "api": {
+    "endpoints": [
+      "POST /api/ai-agents/content/optimize-seo",
+      "POST /api/ai-agents/content/generate-alt-text",
+      "POST /api/ai-agents/client/auto-respond",
+      "POST /api/ai-agents/invoice/generate",
+      "POST /api/ai-agents/project/update-status"
+    ]
+  },
+  "sdk": {
+    "available": true,
+    "npm": "@hansen/ai-agents-sdk",
+    "documentation": "/modules/ai-agents/README.md"
+  }
+}
+

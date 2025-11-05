@@ -1,0 +1,45 @@
+{
+  "id": "user-management",
+  "name": "User Management",
+  "version": "1.0.0",
+  "description": "User authentication, roles, permissions, sessions, and 2FA support.",
+  "license": "Proprietary",
+  "author": "Cato Hansen Agency",
+  "standalone": true,
+  "publishable": true,
+  "dependencies": ["next-auth", "@prisma/client"],
+  "features": [
+    "User authentication (NextAuth)",
+    "Role-based access control (RBAC)",
+    "Session management",
+    "2FA support (TOTP)",
+    "User CRUD operations",
+    "Password hashing (bcrypt/argon2)",
+    "OAuth integration (Google, GitHub)"
+  ],
+  "pricing": {
+    "type": "product",
+    "plans": [
+      {
+        "name": "Free",
+        "price": 0,
+        "features": ["Basic auth", "Up to 10 users"]
+      },
+      {
+        "name": "Starter",
+        "price": 499,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Full auth", "2FA support", "Up to 100 users", "OAuth integration"]
+      },
+      {
+        "name": "Professional",
+        "price": 1999,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Everything in Starter", "Unlimited users", "Priority support"]
+      }
+    ]
+  }
+}
+

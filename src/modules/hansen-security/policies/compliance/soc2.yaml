@@ -1,0 +1,57 @@
+# SOC 2 Compliance Policy Templates
+# System and Organization Controls 2
+# Common Criteria (CC) - Security, Availability, Processing Integrity, Confidentiality, Privacy
+
+# Security Controls
+resource: "security"
+actions: ["read", "write", "delete", "audit"]
+roles: ["OWNER", "ADMIN"]
+effect: "ALLOW"
+reason: "SOC2 CC1: Only authorized personnel can access security controls"
+compliance:
+  framework: "SOC2"
+  criterion: "CC1"
+  category: "Security"
+
+# Access Control
+resource: "access"
+actions: ["manage", "revoke", "review"]
+roles: ["OWNER", "ADMIN"]
+effect: "ALLOW"
+conditions:
+  - "principal.attributes.mfaEnabled == true"
+  - "principal.attributes.accessReviewed == true"
+reason: "SOC2 CC6: Access control requires MFA and regular review"
+compliance:
+  framework: "SOC2"
+  criterion: "CC6"
+  category: "Security"
+
+# Audit Logging
+resource: "audit"
+actions: ["read", "export"]
+roles: ["OWNER", "ADMIN", "AUDITOR"]
+effect: "ALLOW"
+reason: "SOC2 CC7: Audit logs must be accessible to authorized personnel"
+compliance:
+  framework: "SOC2"
+  criterion: "CC7"
+  category: "Security"
+
+# Data Encryption
+resource: "data"
+actions: ["encrypt", "decrypt", "manage"]
+roles: ["OWNER", "ADMIN"]
+effect: "ALLOW"
+reason: "SOC2 CC6.7: Data encryption controls"
+compliance:
+  framework: "SOC2"
+  criterion: "CC6.7"
+  category: "Security"
+
+
+
+
+
+
+

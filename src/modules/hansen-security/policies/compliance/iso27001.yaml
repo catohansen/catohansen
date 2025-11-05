@@ -1,0 +1,68 @@
+# ISO 27001 Compliance Policy Templates
+# Information Security Management System (ISMS)
+
+# Access Control (A.9)
+resource: "access_control"
+actions: ["grant", "revoke", "review", "audit"]
+roles: ["OWNER", "ADMIN", "SECURITY_OFFICER"]
+effect: "ALLOW"
+reason: "ISO 27001 A.9.1: Access control policy"
+compliance:
+  framework: "ISO27001"
+  control: "A.9.1"
+  category: "Access Control"
+
+# User Access Management (A.9.2)
+resource: "user_access"
+actions: ["create", "modify", "disable", "remove"]
+roles: ["OWNER", "ADMIN"]
+effect: "ALLOW"
+conditions:
+  - "principal.attributes.approved == true"
+reason: "ISO 27001 A.9.2: User access management"
+compliance:
+  framework: "ISO27001"
+  control: "A.9.2"
+  category: "Access Control"
+
+# Privileged Access Management (A.9.2.3)
+resource: "privileged_access"
+actions: ["grant", "revoke", "review"]
+roles: ["OWNER", "SECURITY_OFFICER"]
+effect: "ALLOW"
+conditions:
+  - "principal.attributes.justificationRequired == true"
+reason: "ISO 27001 A.9.2.3: Management of privileged access rights"
+compliance:
+  framework: "ISO27001"
+  control: "A.9.2.3"
+  category: "Access Control"
+
+# Cryptographic Controls (A.10.1)
+resource: "cryptography"
+actions: ["encrypt", "decrypt", "manage_keys"]
+roles: ["OWNER", "ADMIN", "SECURITY_OFFICER"]
+effect: "ALLOW"
+reason: "ISO 27001 A.10.1: Cryptographic controls"
+compliance:
+  framework: "ISO27001"
+  control: "A.10.1"
+  category: "Cryptography"
+
+# Logging and Monitoring (A.12.4)
+resource: "logging"
+actions: ["read", "export", "analyze"]
+roles: ["OWNER", "ADMIN", "SECURITY_OFFICER", "AUDITOR"]
+effect: "ALLOW"
+reason: "ISO 27001 A.12.4: Logging and monitoring"
+compliance:
+  framework: "ISO27001"
+  control: "A.12.4"
+  category: "Operations Security"
+
+
+
+
+
+
+

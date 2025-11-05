@@ -1,0 +1,211 @@
+[
+  {
+    "id": "security2",
+    "name": "Security 2.0",
+    "displayName": "Security 2.0",
+    "version": "2.0.0",
+    "description": "Neste generasjons policy- og sikkerhetsmotor for Hansen Global Platform. Enterprise-grade authorization system med RBAC, ABAC og compliance support.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "Security",
+    "status": "Production Ready",
+    "active": true,
+    "link": "/modules/security2",
+    "adminLink": "/admin/hansen-security",
+    "apiLink": "/api/v1/modules/security2",
+    "image": "/img/security2.png",
+    "icon": "Shield",
+    "color": "from-red-500 to-orange-500",
+    "badge": "Featured",
+    "features": [
+      "Policy Engine",
+      "RBAC/ABAC",
+      "Audit Logging",
+      "Compliance (SOC2, ISO27001, GDPR)",
+      "Multi-tenant",
+      "Zero-Trust Architecture"
+    ],
+    "pricing": {
+      "type": "product",
+      "plans": [
+        {
+          "name": "Free",
+          "price": 0,
+          "features": ["Basic RBAC", "Up to 100 policies"]
+        },
+        {
+          "name": "Starter",
+          "price": 499,
+          "currency": "NOK",
+          "period": "month",
+          "features": ["Full RBAC", "ABAC support", "Up to 1,000 policies"]
+        },
+        {
+          "name": "Professional",
+          "price": 1999,
+          "currency": "NOK",
+          "period": "month",
+          "features": ["Full RBAC & ABAC", "Unlimited policies", "Audit logging", "Priority support"]
+        },
+        {
+          "name": "Enterprise",
+          "price": "custom",
+          "features": ["Everything in Professional", "Custom integrations", "SLA", "Dedicated support"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "nora",
+    "name": "Nora AI",
+    "displayName": "Nora AI",
+    "version": "2.0.0",
+    "description": "Revolutionær AI-assistent for Hansen Global Platform. Mye mer avansert enn Siri, Alexa og Google Assistant. Intelligent, emosjonell og levende AI-assistent bygget for ekte samarbeid.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "AI & Automation",
+    "status": "Production Ready",
+    "active": true,
+    "link": "/modules/nora",
+    "adminLink": "/admin/nora/dashboard",
+    "apiLink": "/api/v1/modules/nora",
+    "image": "/img/nora.png",
+    "icon": "Brain",
+    "color": "from-purple-500 to-pink-500",
+    "badge": "Revolutionary",
+    "features": [
+      "Memory Engine",
+      "Emotion Engine",
+      "Voice Engine",
+      "System Orchestrator",
+      "Security & Auth",
+      "Automation Engine"
+    ],
+    "pricing": {
+      "type": "product",
+      "plans": [
+        {
+          "name": "Free",
+          "price": 0,
+          "features": ["Basic chat", "Limited memory", "Standard responses"]
+        },
+        {
+          "name": "Starter",
+          "price": 499,
+          "currency": "NOK",
+          "period": "month",
+          "features": ["Full chat", "Extended memory", "Voice input/output"]
+        },
+        {
+          "name": "Professional",
+          "price": 1999,
+          "currency": "NOK",
+          "period": "month",
+          "features": ["Everything in Starter", "Advanced AI", "Custom integrations", "Priority support"]
+        }
+      ]
+    }
+  },
+  {
+    "id": "pengeplan",
+    "name": "Pengeplan 2.0",
+    "displayName": "Pengeplan 2.0",
+    "version": "2.0.0",
+    "description": "Økonomisk mestring for alle brukere. Intelligent økonomistyring med AI-drevet innsikt og automatisering.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "Finance",
+    "status": "Production Ready",
+    "active": true,
+    "link": "/modules/pengeplan",
+    "adminLink": "/admin/billing",
+    "apiLink": "/api/v1/modules/pengeplan",
+    "image": "/img/pengeplan.png",
+    "icon": "CreditCard",
+    "color": "from-green-500 to-emerald-500",
+    "features": [
+      "Budget Tracking",
+      "AI Insights",
+      "Automation",
+      "Reports"
+    ]
+  },
+  {
+    "id": "resilient13",
+    "name": "Resilient13",
+    "displayName": "Resilient13",
+    "version": "1.0.0",
+    "description": "Avhengighets- og motivasjonsprogram. Psykologi, avhengighetsmestring og motivasjon for å bygge robusthet.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "Health & Wellness",
+    "status": "Coming Soon",
+    "active": false,
+    "link": "/modules/resilient13",
+    "adminLink": "/admin/resilient13",
+    "apiLink": "/api/v1/modules/resilient13",
+    "image": "/img/resilient13.png",
+    "icon": "Zap",
+    "color": "from-blue-500 to-cyan-500",
+    "badge": "Coming Soon",
+    "features": [
+      "Progress Tracking",
+      "AI Coaching",
+      "Community",
+      "Analytics"
+    ]
+  },
+  {
+    "id": "crm",
+    "name": "Hansen CRM 2.0",
+    "displayName": "Hansen CRM 2.0",
+    "version": "2.0.0",
+    "description": "Intelligent kundehåndtering og pipeline-styring. Enterprise-grade CRM med AI-drevet innsikt og automatisering.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "Business",
+    "status": "Production Ready",
+    "active": true,
+    "link": "/modules/crm",
+    "adminLink": "/admin/clients",
+    "apiLink": "/api/v1/modules/client-management",
+    "image": "/img/crm.png",
+    "icon": "Briefcase",
+    "color": "from-indigo-500 to-purple-500",
+    "features": [
+      "Client Management",
+      "Pipeline Tracking",
+      "AI Insights",
+      "Automation",
+      "Reports"
+    ]
+  },
+  {
+    "id": "mindmap",
+    "name": "MindMap 2.0",
+    "displayName": "MindMap 2.0",
+    "version": "2.0.0",
+    "description": "AI-drevet mindmapping med Copilot, multi-input og enterprise-eksport. Enterprise-grade produktivitetsløsning for visualisering av ideer, planlegging og kollaborasjon.",
+    "author": "Cato Hansen",
+    "license": "PROPRIETARY",
+    "category": "Productivity",
+    "status": "Coming Soon",
+    "active": false,
+    "link": "/modules/mindmap",
+    "adminLink": "/admin/mindmaps",
+    "apiLink": "/api/v1/modules/mindmap",
+    "image": "/img/mindmap.png",
+    "icon": "FileText",
+    "color": "from-violet-500 to-purple-500",
+    "badge": "Coming Soon - Mars 2026",
+    "features": [
+      "AI Copilot",
+      "Multi-Input",
+      "Realtime Collaboration",
+      "Export",
+      "Version History",
+      "Template Library"
+    ]
+  }
+]
+

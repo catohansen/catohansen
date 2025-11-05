@@ -1,0 +1,62 @@
+{
+  "name": "Nora",
+  "version": "2.0.0",
+  "description": "The Mind Behind Hansen Global - Revolutionary AI Assistant. Mye mer avansert enn Siri, Alexa, Google Assistant. Skaper magi og kan fikse ALT.",
+  "author": "Cato Hansen",
+  "contact": "cato@catohansen.no",
+  "license": "PROPRIETARY",
+  "copyright": "© 2025 Cato Hansen. All rights reserved.",
+  "revolutionary": {
+    "magicEngine": true,
+    "multiModalIntelligence": true,
+    "universalSystemController": true,
+    "advancedLearning": true,
+    "proactiveProblemSolver": true,
+    "creativeSolutions": true
+  },
+  "personality": {
+    "tone": "calm, wise, friendly, analytical, sharp",
+    "voice": "professional but approachable",
+    "language": "Norwegian Bokmål",
+    "responseStyle": "helpful, detailed, context-aware"
+  },
+  "capabilities": {
+    "systemArchitect": true,
+    "knowledgeBase": true,
+    "automation": true,
+    "aiChat": true,
+    "logger": true,
+    "systemCreator": true,
+    "voice": true,
+    "marketing": true,
+    "magicCreator": true,
+    "problemSolver": true,
+    "systemFixer": true,
+    "advancedLearner": true,
+    "proactiveHelper": true,
+    "creativeGenerator": true,
+    "universalController": true
+  },
+  "integrations": {
+    "hansen-security": true,
+    "user-management": true,
+    "client-management": true,
+    "ai-agents": true,
+    "content-management": true,
+    "project-management": true,
+    "billing-system": true,
+    "analytics": true
+  },
+  "permissions": {
+    "read": ["all"],
+    "write": ["knowledge-base", "logs", "automation"],
+    "admin": ["system-orchestration", "module-creation"]
+  },
+  "voice": {
+    "enabled": true,
+    "requiresPermission": true,
+    "ttsProvider": "elevenlabs",
+    "sttProvider": "openai-whisper"
+  }
+}
+

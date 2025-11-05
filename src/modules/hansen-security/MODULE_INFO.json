@@ -1,0 +1,49 @@
+{
+  "id": "hansen-security",
+  "name": "Hansen Security",
+  "version": "1.0.0",
+  "description": "Fine-grained authorization system built by Cato Hansen Agency. Policy-based access control with RBAC and ABAC support. Our own implementation - not based on Cerbos.",
+  "license": "Proprietary",
+  "author": "Cato Hansen Agency",
+  "standalone": true,
+  "publishable": true,
+  "dependencies": [],
+  "features": [
+    "Policy-based authorization",
+    "RBAC (Role-Based Access Control)",
+    "ABAC (Attribute-Based Access Control)",
+    "Audit logging",
+    "Policy versioning",
+    "Deny by default"
+  ],
+  "pricing": {
+    "type": "product",
+    "plans": [
+      {
+        "name": "Free",
+        "price": 0,
+        "features": ["Basic RBAC", "Up to 100 policies"]
+      },
+      {
+        "name": "Starter",
+        "price": 499,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Full RBAC", "ABAC support", "Up to 1,000 policies"]
+      },
+      {
+        "name": "Professional",
+        "price": 1999,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Full RBAC & ABAC", "Unlimited policies", "Audit logging", "Priority support"]
+      },
+      {
+        "name": "Enterprise",
+        "price": "custom",
+        "features": ["Everything in Professional", "Custom integrations", "SLA", "Dedicated support"]
+      }
+    ]
+  }
+}
+

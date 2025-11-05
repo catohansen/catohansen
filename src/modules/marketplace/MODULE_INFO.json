@@ -1,0 +1,46 @@
+{
+  "id": "marketplace",
+  "name": "marketplace",
+  "displayName": "Hansen Marketplace",
+  "version": "1.0.0",
+  "description": "Module marketplace for selling and distributing Hansen Global modules",
+  "category": "commerce",
+  "status": "active",
+  "author": "Cato Hansen",
+  "license": "PROPRIETARY",
+  "tags": ["marketplace", "ecommerce", "modules", "sales"],
+  "dependencies": [],
+  "features": [
+    "Product catalog",
+    "Pricing management",
+    "License management",
+    "Stripe integration ready",
+    "Module distribution",
+    "Demo access control"
+  ],
+  "pricing": {
+    "model": "free",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "price": 0,
+        "currency": "NOK",
+        "interval": "lifetime",
+        "features": ["Browse all modules", "View documentation", "Access demos"]
+      }
+    }
+  },
+  "api": {
+    "endpoints": [
+      "GET /api/marketplace/products",
+      "GET /api/marketplace/products/:id",
+      "POST /api/marketplace/purchase"
+    ]
+  },
+  "sdk": {
+    "available": true,
+    "npm": "@hansen/marketplace-sdk",
+    "documentation": "/modules/marketplace/README.md"
+  }
+}
+

@@ -1,0 +1,122 @@
+name: Module Sync & Release
+
+on:
+  push:
+    paths:
+      - 'src/modules/**'
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module to sync (leave empty for all)'
+        required: false
+        type: string
+      direction:
+        description: 'Sync direction'
+        required: false
+        type: choice
+        options:
+          - to-github
+          - from-github
+          - bidirectional
+        default: to-github
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.changes.outputs.modules }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Detect module changes
+        id: changes
+        run: |
+          if [ "${{ github.event.inputs.module }}" != "" ]; then
+            echo "modules=[\"${{ github.event.inputs.module }}\"]" >> $GITHUB_OUTPUT
+          else
+            # Detect changed modules from git diff
+            MODULES=$(git diff --name-only HEAD~1 HEAD | grep -o 'src/modules/[^/]*' | sort -u | sed 's|src/modules/||' | jq -R . | jq -s .)
+            echo "modules=$MODULES" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Output modules
+        run: |
+          echo "Changed modules: ${{ steps.changes.outputs.modules }}"
+
+  sync-modules:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.modules != '[]' }}
+    strategy:
+      matrix:
+        module: ${{ fromJson(needs.detect-changes.outputs.modules) }}
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Sync ${{ matrix.module }} to GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          # This would call the sync API endpoint
+          # For now, we'll use git subtree directly
+          MODULE_NAME="${{ matrix.module }}"
+          MODULE_PATH="src/modules/$MODULE_NAME"
+          
+          # Check if MODULE_INFO.json exists
+          if [ ! -f "$MODULE_PATH/MODULE_INFO.json" ]; then
+            echo "Module $MODULE_NAME not found or not configured"
+            exit 0
+          fi
+          
+          # Extract GitHub repo from MODULE_INFO.json
+          GITHUB_REPO=$(node -e "const info = require('./$MODULE_PATH/MODULE_INFO.json'); console.log(info.repository?.url?.match(/github\.com\/([^\/]+)\/([^\/]+)/)?.[0]?.replace('github.com/', '') || '')")
+          
+          if [ -z "$GITHUB_REPO" ]; then
+            echo "GitHub repo not configured for $MODULE_NAME"
+            exit 0
+          fi
+          
+          # Add GitHub remote if not exists
+          git remote add $MODULE_NAME https://github.com/$GITHUB_REPO.git || git remote set-url $MODULE_NAME https://github.com/$GITHUB_REPO.git
+          
+          # Push subtree to GitHub
+          git subtree push --prefix=$MODULE_PATH $MODULE_NAME main --message "chore: sync $MODULE_NAME to GitHub"
+      
+      - name: Update module sync status
+        if: success()
+        run: |
+          echo "✅ Successfully synced ${{ matrix.module }} to GitHub"
+
+
+
+
+

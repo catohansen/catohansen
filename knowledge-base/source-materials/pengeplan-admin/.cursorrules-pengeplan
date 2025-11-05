@@ -1,0 +1,57 @@
+# Pengeplan 2.0 - Cursor Rules
+
+## File Organization Rules
+- ALL .md files MUST be placed in `system-knowledge/` folder
+- Temporary PDF files for development go in `dev-learning/` (not in Git)
+- Never create .md files in root or other directories
+
+## Documentation Structure
+- `system-knowledge/` - Permanent knowledge base (in Git)
+- `dev-learning/` - Temporary learning resources (not in Git)
+
+## Code Quality Rules
+- Fix TypeScript errors immediately
+- Use real data only (no mock data)
+- Test mobile responsiveness
+- Check accessibility (WCAG 2.1 AA)
+- Always check tasks.json before starting work
+
+## Admin System Rules
+- Admin controls everything
+- Single source of truth
+- 100% data integrity
+- Real-time verification required
+
+## Norwegian Compliance
+- All text must be in Norwegian (bokmål)
+- Follow Norwegian financial regulations
+- NAV integration and compliance
+- GDPR compliance required
+
+## Security Rules
+- Ultra-secure authentication for owner (cato@catohansen.no)
+- Cerbos authorization policies
+- Audit logging for all actions
+- No hardcoded credentials
+
+## Performance Rules
+- <2 seconds load time on mobile
+- 100% WCAG 2.1 AA compliance
+- Real-time updates via SSE/WebSocket
+- Database-agnostic storage
+
+## AI System Rules
+- Explainable AI decisions
+- Bias monitoring required
+- Human oversight mandatory
+- Norwegian context awareness
+- AI Act compliance (2026)
+
+## Testing Rules
+- Unit tests for all functions
+- Integration tests for APIs
+- E2E tests for user flows
+- Performance tests required
+- Accessibility tests mandatory
+
+

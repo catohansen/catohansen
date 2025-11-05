@@ -1,0 +1,83 @@
+name: Module Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'Module to release'
+        required: true
+        type: string
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      release_notes:
+        description: 'Release notes'
+        required: false
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          MODULE_NAME: ${{ github.event.inputs.module }}
+          VERSION: ${{ github.event.inputs.version }}
+          RELEASE_NOTES: ${{ github.event.inputs.release_notes }}
+        run: |
+          # Call API to create release
+          curl -X POST "https://your-api.com/api/modules/$MODULE_NAME/release" \
+            -H "Content-Type: application/json" \
+            -d "{\"version\": \"$VERSION\", \"releaseNotes\": \"$RELEASE_NOTES\"}" \
+            -H "Authorization: Bearer $GITHUB_TOKEN"
+      
+      - name: Create GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MODULE_NAME="${{ github.event.inputs.module }}"
+          VERSION="${{ github.event.inputs.version }}"
+          RELEASE_NOTES="${{ github.event.inputs.release_notes }}"
+          
+          # Extract GitHub repo
+          GITHUB_REPO=$(node -e "const info = require('./src/modules/$MODULE_NAME/MODULE_INFO.json'); console.log(info.repository?.url?.match(/github\.com\/([^\/]+)\/([^\/]+)/)?.[0]?.replace('github.com/', '') || '')")
+          
+          if [ -z "$GITHUB_REPO" ]; then
+            echo "GitHub repo not configured"
+            exit 1
+          fi
+          
+          # Create GitHub release
+          gh release create "v$VERSION" \
+            --repo "$GITHUB_REPO" \
+            --title "Release v$VERSION" \
+            --notes "$RELEASE_NOTES" \
+            --target main
+
+
+
+
+

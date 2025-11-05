@@ -1,0 +1,76 @@
+{
+  "id": "hansen-mindmap-2.0",
+  "name": "hansen-mindmap-2.0",
+  "displayName": "MindMap 2.0",
+  "version": "0.1.0",
+  "description": "MindMap 2.0 - AI-drevet mindmapping med Copilot, multi-input (PDF/bilde/audio/video), sanntidssamarbeid og enterprise-eksport. Laget av Cato Hansen. Enterprise-grade produktivitetsløsning.",
+  "category": "Productivity",
+  "status": "Coming Soon",
+  "releaseDate": "2026-03-01",
+  "author": "Cato Hansen",
+  "license": "PROPRIETARY",
+  "githubUrl": "https://github.com/catohansen/hansen-mindmap-2.0",
+  "npmPackage": "@hansen/mindmap-2.0",
+  "features": [
+    "AI Copilot",
+    "Multi-Input (PDF/Bilde/Audio/Video)",
+    "Realtime Collaboration",
+    "Export (PNG/PDF/SVG/Markdown)",
+    "Version History",
+    "Template Library",
+    "Outline & Presentation Mode",
+    "Integration Support"
+  ],
+  "techStack": [
+    "Next.js 14",
+    "TypeScript",
+    "Prisma",
+    "React Flow",
+    "Supabase Realtime",
+    "OpenAI API"
+  ],
+  "pricing": {
+    "free": {
+      "maps": 3,
+      "aiCredits": 50,
+      "collaboration": 2
+    },
+    "personal": {
+      "price": 69,
+      "maps": "unlimited",
+      "aiCredits": 1000,
+      "features": ["SVG/Markdown Export", "Outline Mode", "Templates"]
+    },
+    "pro": {
+      "price": 129,
+      "features": ["Multi-Input", "Version History", "Integrations", "3000 AI Credits"]
+    },
+    "business": {
+      "price": 149,
+      "perUser": true,
+      "features": ["RBAC", "SSO", "Compliance Export", "Dedicated Support"]
+    }
+  },
+  "roadmap": {
+    "q1_2026": [
+      "Core Editor",
+      "AI Quick-Map",
+      "Basic Export"
+    ],
+    "q2_2026": [
+      "Multi-Input",
+      "Collaboration",
+      "Templates"
+    ],
+    "q3_2026": [
+      "Version History",
+      "Integrations",
+      "Mobile Apps"
+    ]
+  },
+  "dependencies": [],
+  "createdAt": "2025-01-27T00:00:00Z",
+  "updatedAt": "2025-01-27T00:00:00Z"
+}
+
+

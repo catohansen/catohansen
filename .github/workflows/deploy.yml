@@ -1,0 +1,49 @@
+name: Deploy to Domeneshop
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Tillater manuell kjøring fra GitHub UI
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build Next.js (Static Export)
+        run: npm run build
+        # Next.js eksporterer automatisk til 'out/' mappen med output: 'export'
+      
+      - name: Deploy via FTP to Domeneshop
+        uses: SamKirkland/FTP-Deploy-Action@4.3.4
+        with:
+          server: ftp.domeneshop.no
+          username: catohansen
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./out/
+          server-dir: /www/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.env*
+            **/.DS_Store
+      
+      - name: Deployment Complete
+        run: |
+          echo "✅ Deployment fullført!"
+          echo "🌐 Nettsiden er nå oppdatert på catohansen.no"
+          echo "📅 Deployed: $(date)"
+

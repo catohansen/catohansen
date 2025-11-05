@@ -1,0 +1,1438 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // For development without database, use: DATABASE_URL="postgresql://user:password@localhost:5432/db?schema=public"
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+// Legacy Role enum - kept for backwards compatibility
+// New systems should use the Role model instead
+enum SystemRole {
+  OWNER
+  ADMIN
+  EDITOR
+  CLIENT
+  SERVICE
+  VIEWER
+  MODERATOR
+  DEVELOPER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+  ARCHIVED
+}
+
+enum PermissionAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  PUBLISH
+  ARCHIVE
+  MANAGE
+  ADMINISTER
+}
+
+enum GroupType {
+  TEAM
+  DEPARTMENT
+  ORGANIZATION
+  CUSTOM
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+}
+
+enum JobStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+  DLQ
+}
+
+enum LeadStatus {
+  NEW
+  QUALIFIED
+  WON
+  LOST
+  ONHOLD
+}
+
+// ============================================
+// USER MANAGEMENT MODULE (ADVANCED RBAC)
+// ============================================
+
+model User {
+  id                  String     @id @default(cuid())
+  email               String     @unique
+  name                String?
+  image               String?
+  passwordHash        String? // bcrypt/argon2 hash
+  role                SystemRole @default(EDITOR) // Legacy role - use Role model for advanced RBAC
+  status              UserStatus @default(PENDING_VERIFICATION)
+  twoFASecret         String?    @db.Text // encrypted
+  twoFAEnabled        Boolean    @default(false)
+  emailVerified       Boolean    @default(false)
+  emailVerifiedAt     DateTime?
+  lastLoginAt         DateTime?
+  lastLoginIp         String?
+  failedLoginAttempts Int        @default(0)
+  lockedUntil         DateTime?
+  phone               String?
+  timezone            String?    @default("Europe/Oslo")
+  locale              String?    @default("no-NO")
+  metadata            Json? // additional user metadata
+  tenantId            String?
+  tenant              Tenant?    @relation(fields: [tenantId], references: [id])
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  // Relations
+  sessions        Session[]
+  accounts        Account[]
+  auditLogs       AuditLog[]
+  apiKeys         ApiKey[]
+  createdPosts    Post[]     @relation("PostCreator")
+  createdProjects Project[]  @relation("ProjectCreator")
+  createdPrompts  Prompt[]
+  createdSecrets  Secret[]
+  createdJobs     Job[]
+
+  // Advanced RBAC Relations
+  userRoles          UserRole[]
+  userGroups         UserGroup[]
+  userPermissions    UserPermission[]
+  assignedRoles      RoleAssignment[]
+  createdRoles       Role[]           @relation("RoleCreator")
+  createdPermissions Permission[]     @relation("PermissionCreator")
+  createdGroups      Group[]          @relation("GroupCreator")
+
+  // CRM Relations
+  createdClients        Client[]            @relation("ClientCreator")
+  createdPipelines      Pipeline[]          @relation("PipelineCreator")
+  createdCommunications Communication[]     @relation("CommunicationCreator")
+  createdTasks          Task[]              @relation("TaskCreator")
+  assignedTasks         Task[]              @relation("TaskAssignee")
+  createdWorkflows      Workflow[]          @relation("WorkflowCreator")
+  createdEmailSequences EmailSequence[]     @relation("EmailSequenceCreator")
+  createdEmailTemplates EmailTemplate[]     @relation("EmailTemplateCreator")
+  createdDocuments      Document[]          @relation("DocumentCreator")
+  createdReports        Report[]            @relation("ReportCreator")
+  notifications         Notification[]      @relation("UserNotifications")
+  createdModuleReleases ModuleRelease[]     @relation("ModuleReleaseCreator")
+  createdDeployments    DeploymentHistory[] @relation("DeploymentCreator")
+
+  @@index([email])
+  @@index([role])
+  @@index([status])
+  @@index([tenantId])
+  @@index([emailVerified])
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires      DateTime
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model ApiKey {
+  id        String    @id @default(cuid())
+  name      String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scopes    String[] // array of permission scopes
+  hashedKey String // bcrypt/argon2
+  lastUsed  DateTime?
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+
+  @@index([userId])
+  @@index([hashedKey])
+  @@map("api_keys")
+}
+
+// ============================================
+// CONTENT MANAGEMENT MODULE
+// ============================================
+
+model Project {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  summary     String?       @db.Text
+  content     Json? // Rich content
+  status      ProjectStatus @default(DRAFT)
+  coverImage  String?
+  tags        String[]
+  clientId    String?
+  client      Client?       @relation(fields: [clientId], references: [id])
+  createdById String?
+  createdBy   User?         @relation("ProjectCreator", fields: [createdById], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([clientId])
+  @@map("projects")
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  title       String
+  excerpt     String?    @db.Text
+  content     Json // Rich content (MDX/JSON)
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdById String?
+  createdBy   User?      @relation("PostCreator", fields: [createdById], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+  @@map("posts")
+}
+
+model Media {
+  id         String   @id @default(cuid())
+  url        String
+  alt        String?
+  width      Int?
+  height     Int?
+  size       Int? // file size in bytes
+  mimeType   String?
+  meta       Json? // additional metadata
+  uploadedBy String?
+  createdAt  DateTime @default(now())
+
+  @@index([url])
+  @@map("media")
+}
+
+// ============================================
+// AI AGENTS MODULE
+// ============================================
+
+model Prompt {
+  id          String   @id @default(cuid())
+  name        String
+  version     Int      @default(1)
+  content     String   @db.Text // the prompt template
+  tags        String[]
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  runs PromptRun[]
+
+  @@index([name])
+  @@index([createdById])
+  @@map("prompts")
+}
+
+model PromptRun {
+  id        String   @id @default(cuid())
+  promptId  String
+  prompt    Prompt   @relation(fields: [promptId], references: [id], onDelete: Cascade)
+  input     Json // input data
+  output    Json? // output data
+  model     String // e.g. "gpt-4", "claude-3"
+  costUsd   Decimal? @db.Decimal(10, 5) // cost in USD
+  latencyMs Int? // latency in milliseconds
+  success   Boolean  @default(true)
+  error     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([promptId])
+  @@index([createdAt])
+  @@map("prompt_runs")
+}
+
+// ============================================
+// SECURITY MODULE
+// ============================================
+
+model Secret {
+  id          String   @id @default(cuid())
+  key         String   @unique // e.g. OPENAI_API_KEY
+  valueEnc    String   @db.Text // ciphertext (encrypted)
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([key])
+  @@map("secrets")
+}
+
+// ============================================
+// AUTOMATION MODULE
+// ============================================
+
+model Job {
+  id          String    @id @default(cuid())
+  type        String // e.g. "send-email", "process-payment"
+  payload     Json // job data
+  status      JobStatus @default(PENDING)
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(3)
+  runAt       DateTime  @default(now())
+  completedAt DateTime?
+  lastError   String?   @db.Text
+  createdById String?
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@index([status])
+  @@index([runAt])
+  @@index([type])
+  @@map("jobs")
+}
+
+model Webhook {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  secret    String? // HMAC secret for signing
+  events    String[] // array of event types
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([active])
+  @@map("webhooks")
+}
+
+// ============================================
+// CLIENT MANAGEMENT MODULE (HANSEN CRM)
+// ============================================
+
+model Client {
+  id             String       @id @default(cuid())
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  industry       String?
+  website        String?
+  companySize    String? // e.g. "1-10", "11-50", "51-200", "201-500", "500+"
+  annualRevenue  Decimal?     @db.Decimal(12, 2)
+  lifecycleStage String? // Lead, MQL, SQL, Customer, Churned
+  leadSource     String? // Website, Referral, TikTok, LinkedIn, etc.
+  leadScore      Int?         @default(0) // AI-powered lead score (0-100)
+  status         ClientStatus @default(ACTIVE)
+  tags           String[]
+  customFields   Json?
+  metadata       Json?
+
+  // Relations
+  tenantId       String?
+  tenant         Tenant?         @relation(fields: [tenantId], references: [id])
+  communications Communication[]
+  pipelines      Pipeline[]
+  projects       Project[]
+  lead           Lead?
+  tasks          Task[]
+  documents      Document[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation("ClientCreator", fields: [createdById], references: [id])
+
+  @@index([email])
+  @@index([status])
+  @@index([lifecycleStage])
+  @@index([leadSource])
+  @@index([tenantId])
+  @@map("clients")
+}
+
+enum ClientStatus {
+  ACTIVE
+  INACTIVE
+  LEAD
+  CHURNED
+  PROSPECT
+}
+
+model Pipeline {
+  id            String        @id @default(cuid())
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name          String // e.g. "Website Redesign", "SEO Campaign"
+  stage         PipelineStage @default(DISCOVERY)
+  value         Decimal?      @db.Decimal(12, 2)
+  currency      String?       @default("NOK")
+  probability   Int?          @default(50) // Win probability 0-100%
+  expectedClose DateTime?
+  actualClose   DateTime?
+  won           Boolean?      @default(false)
+  lost          Boolean?      @default(false)
+  lostReason    String?
+  notes         String?       @db.Text
+  metadata      Json?
+
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  createdById String?
+  createdBy   User?      @relation("PipelineCreator", fields: [createdById], references: [id])
+  tasks       Task[]
+  documents   Document[]
+
+  @@index([clientId])
+  @@index([stage])
+  @@index([won])
+  @@index([lost])
+  @@index([expectedClose])
+  @@map("pipelines")
+}
+
+enum PipelineStage {
+  DISCOVERY
+  QUALIFICATION
+  PROPOSAL
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+model Communication {
+  id           String            @id @default(cuid())
+  clientId     String
+  client       Client            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  type         CommunicationType
+  subject      String?
+  content      String?           @db.Text
+  direction    Direction         @default(INBOUND)
+  participants String[] // Array of email addresses or names
+  duration     Int? // Duration in seconds (for calls)
+  metadata     Json? // Email headers, call duration, meeting notes, attachments, etc.
+
+  createdAt   DateTime @default(now())
+  createdById String?
+  createdBy   User?    @relation("CommunicationCreator", fields: [createdById], references: [id])
+
+  @@index([clientId])
+  @@index([type])
+  @@index([direction])
+  @@index([createdAt])
+  @@map("communications")
+}
+
+enum CommunicationType {
+  EMAIL
+  CALL
+  MEETING
+  NOTE
+  SMS
+  SLACK
+  TEAMS
+  WHATSAPP
+  OTHER
+}
+
+enum Direction {
+  INBOUND
+  OUTBOUND
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  source    String // form, referral, tiktok, etc.
+  name      String?
+  email     String?
+  phone     String?
+  company   String?
+  message   String?    @db.Text
+  score     Int        @default(0) // AI qualification score (0-100)
+  status    LeadStatus @default(NEW)
+  qualified Boolean    @default(false)
+  converted Boolean    @default(false)
+  clientId  String?    @unique // If converted to client
+  client    Client?    @relation(fields: [clientId], references: [id])
+  meta      Json? // additional metadata
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([source])
+  @@index([qualified])
+  @@index([converted])
+  @@index([clientId])
+  @@map("leads")
+}
+
+// ============================================
+// CRM AUTOMATION & TASKS
+// ============================================
+
+model Task {
+  id               String       @id @default(cuid())
+  title            String
+  description      String?      @db.Text
+  status           TaskStatus   @default(TODO)
+  priority         TaskPriority @default(MEDIUM)
+  dueDate          DateTime?
+  completedAt      DateTime?
+  assignedToId     String?
+  assignedTo       User?        @relation("TaskAssignee", fields: [assignedToId], references: [id])
+  clientId         String?
+  client           Client?      @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  pipelineId       String?
+  pipeline         Pipeline?    @relation(fields: [pipelineId], references: [id], onDelete: SetNull)
+  isRecurring      Boolean      @default(false)
+  recurringPattern String? // e.g. "daily", "weekly", "monthly"
+  metadata         Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  createdById      String?
+  createdBy        User?        @relation("TaskCreator", fields: [createdById], references: [id])
+
+  @@index([assignedToId])
+  @@index([clientId])
+  @@index([pipelineId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model Workflow {
+  id                String   @id @default(cuid())
+  name              String
+  description       String?  @db.Text
+  trigger           String // e.g. "lead.created", "deal.won", "client.churned"
+  triggerConditions Json? // Conditions for trigger
+  actions           Json // Array of actions
+  isActive          Boolean  @default(true)
+  metadata          Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  createdById       String?
+  createdBy         User?    @relation("WorkflowCreator", fields: [createdById], references: [id])
+
+  @@index([trigger])
+  @@index([isActive])
+  @@map("workflows")
+}
+
+model EmailSequence {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  steps       Json // Array of email steps with delays
+  trigger     String // e.g. "lead.qualified", "deal.created"
+  isActive    Boolean  @default(true)
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation("EmailSequenceCreator", fields: [createdById], references: [id])
+
+  @@index([trigger])
+  @@index([isActive])
+  @@map("email_sequences")
+}
+
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  subject     String
+  body        String   @db.Text
+  variables   String[] // Available variables
+  category    String? // e.g. "welcome", "follow-up", "proposal"
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String?
+  createdBy   User?    @relation("EmailTemplateCreator", fields: [createdById], references: [id])
+
+  @@index([category])
+  @@map("email_templates")
+}
+
+model Document {
+  id          String     @id @default(cuid())
+  name        String
+  filename    String
+  filepath    String // Path to file storage
+  mimeType    String
+  size        Int // Size in bytes
+  version     Int        @default(1)
+  parentId    String? // For versioning
+  parent      Document?  @relation("DocumentVersions", fields: [parentId], references: [id])
+  versions    Document[] @relation("DocumentVersions")
+  clientId    String?
+  client      Client?    @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  pipelineId  String?
+  pipeline    Pipeline?  @relation(fields: [pipelineId], references: [id], onDelete: SetNull)
+  category    String? // e.g. "contract", "proposal", "invoice", "other"
+  metadata    Json?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  createdById String?
+  createdBy   User?      @relation("DocumentCreator", fields: [createdById], references: [id])
+
+  @@index([clientId])
+  @@index([pipelineId])
+  @@index([category])
+  @@map("documents")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String           @db.Text
+  link      String? // URL to related resource
+  read      Boolean          @default(false)
+  readAt    DateTime?
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([read])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  TASK_DUE
+  DEAL_UPDATE
+  LEAD_QUALIFIED
+  CLIENT_CHURNED
+  SYSTEM_ALERT
+  REMINDER
+  OTHER
+}
+
+model Report {
+  id          String     @id @default(cuid())
+  name        String
+  description String?    @db.Text
+  type        ReportType
+  config      Json // Report configuration (filters, columns, etc.)
+  schedule    String? // Cron expression for scheduled reports
+  lastRun     DateTime?
+  isPublic    Boolean    @default(false)
+  metadata    Json?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  createdById String?
+  createdBy   User?      @relation("ReportCreator", fields: [createdById], references: [id])
+
+  @@index([type])
+  @@index([createdById])
+  @@map("reports")
+}
+
+enum ReportType {
+  SALES
+  PIPELINE
+  CLIENT
+  LEAD
+  REVENUE
+  ACTIVITY
+  CUSTOM
+}
+
+// ============================================
+// HANSEN SECURITY MODULE
+// ============================================
+
+// ============================================
+// PERMISSION & RBAC MODELS
+// ============================================
+
+model Permission {
+  id          String           @id @default(cuid())
+  name        String           @unique // e.g. "project.create", "user.delete"
+  resource    String // e.g. "project", "user", "content"
+  action      PermissionAction // CREATE, READ, UPDATE, DELETE, etc.
+  description String?          @db.Text
+  category    String? // e.g. "content", "users", "settings"
+  metadata    Json? // additional metadata
+  createdById String?
+  createdBy   User?            @relation("PermissionCreator", fields: [createdById], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  rolePermissions  RolePermission[]
+  userPermissions  UserPermission[]
+  groupPermissions GroupPermission[]
+
+  @@index([resource])
+  @@index([action])
+  @@index([category])
+  @@map("permissions")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. "Content Editor", "Project Manager"
+  slug        String   @unique
+  description String?  @db.Text
+  level       Int      @default(0) // Role hierarchy level (higher = more privileged)
+  isSystem    Boolean  @default(false) // System roles cannot be deleted
+  isActive    Boolean  @default(true)
+  metadata    Json? // additional metadata
+  tenantId    String? // Optional: tenant-specific roles
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
+  createdById String?
+  createdBy   User?    @relation("RoleCreator", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+  groupRoles      GroupRole[]
+  roleHierarchy   RoleHierarchy[]  @relation("ParentRole")
+  childRoles      RoleHierarchy[]  @relation("ChildRole")
+  assignedRoles   RoleAssignment[]
+
+  @@index([slug])
+  @@index([level])
+  @@index([isActive])
+  @@index([tenantId])
+  @@map("roles")
+}
+
+model RoleHierarchy {
+  id        String   @id @default(cuid())
+  parentId  String
+  parent    Role     @relation("ParentRole", fields: [parentId], references: [id], onDelete: Cascade)
+  childId   String
+  child     Role     @relation("ChildRole", fields: [childId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([parentId, childId])
+  @@index([parentId])
+  @@index([childId])
+  @@map("role_hierarchies")
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  roleId       String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  granted      Boolean    @default(true) // Can be revoked without removing
+  createdAt    DateTime   @default(now())
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model UserRole {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId     String
+  role       Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assignedAt DateTime  @default(now())
+  assignedBy String? // User ID who assigned this role
+  expiresAt  DateTime? // Optional: role expiration
+  metadata   Json? // additional metadata
+
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([expiresAt])
+  @@map("user_roles")
+}
+
+model UserPermission {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  granted      Boolean    @default(true)
+  grantedAt    DateTime   @default(now())
+  grantedBy    String? // User ID who granted this permission
+  expiresAt    DateTime? // Optional: permission expiration
+  metadata     Json? // additional metadata
+
+  @@unique([userId, permissionId])
+  @@index([userId])
+  @@index([permissionId])
+  @@index([expiresAt])
+  @@map("user_permissions")
+}
+
+model Group {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?   @db.Text
+  type        GroupType @default(CUSTOM)
+  isActive    Boolean   @default(true)
+  metadata    Json? // additional metadata
+  tenantId    String?
+  tenant      Tenant?   @relation(fields: [tenantId], references: [id])
+  createdById String?
+  createdBy   User?     @relation("GroupCreator", fields: [createdById], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  userGroups       UserGroup[]
+  groupRoles       GroupRole[]
+  groupPermissions GroupPermission[]
+
+  @@index([slug])
+  @@index([type])
+  @@index([isActive])
+  @@index([tenantId])
+  @@map("groups")
+}
+
+model UserGroup {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groupId  String
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
+  joinedBy String? // User ID who added user to group
+  role     String? // Optional: user's role in the group (e.g. "leader", "member")
+  metadata Json? // additional metadata
+
+  @@unique([userId, groupId])
+  @@index([userId])
+  @@index([groupId])
+  @@map("user_groups")
+}
+
+model GroupRole {
+  id         String   @id @default(cuid())
+  groupId    String
+  group      Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  roleId     String
+  role       Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assignedAt DateTime @default(now())
+
+  @@unique([groupId, roleId])
+  @@index([groupId])
+  @@index([roleId])
+  @@map("group_roles")
+}
+
+model GroupPermission {
+  id           String     @id @default(cuid())
+  groupId      String
+  group        Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  permissionId String
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  granted      Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  @@unique([groupId, permissionId])
+  @@index([groupId])
+  @@index([permissionId])
+  @@map("group_permissions")
+}
+
+model RoleAssignment {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roleId       String
+  role         Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  resourceId   String? // Optional: resource-specific role (e.g. project-specific admin)
+  resourceType String? // e.g. "project", "client"
+  assignedAt   DateTime  @default(now())
+  assignedBy   String? // User ID who assigned this
+  expiresAt    DateTime? // Optional: assignment expiration
+  metadata     Json? // additional metadata
+
+  @@unique([userId, roleId, resourceId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([resourceId])
+  @@index([resourceType])
+  @@map("role_assignments")
+}
+
+// ============================================
+// HANSEN SECURITY MODULE
+// ============================================
+
+model Tenant {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  slug        String  @unique
+  description String?
+  active      Boolean @default(true)
+
+  // Relations
+  policies  Policy[]
+  users     User[]
+  roles     Role[]
+  groups    Group[]
+  clients   Client[]
+  metadata  Json? // additional metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([active])
+  @@map("tenants")
+}
+
+model Policy {
+  id          String   @id @default(cuid())
+  name        String
+  resource    String // e.g. "content", "project"
+  version     Int      @default(1)
+  rules       Json // Policy rules (actions, roles, conditions)
+  compiled    Boolean  @default(false)
+  active      Boolean  @default(true)
+  tenantId    String?
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id])
+  metadata    Json? // Additional metadata (compliance tags, etc.)
+  createdById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  versions    PolicyVersion[]
+  evaluations PolicyEvaluation[]
+
+  @@unique([name, resource, tenantId])
+  @@index([resource])
+  @@index([tenantId])
+  @@index([active])
+  @@map("policies")
+}
+
+model PolicyVersion {
+  id          String   @id @default(cuid())
+  policyId    String
+  policy      Policy   @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  version     Int
+  rules       Json
+  compiled    Boolean  @default(false)
+  changelog   String?  @db.Text
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  @@unique([policyId, version])
+  @@index([policyId])
+  @@map("policy_versions")
+}
+
+model PolicyEvaluation {
+  id           String   @id @default(cuid())
+  policyId     String?
+  policy       Policy?  @relation(fields: [policyId], references: [id])
+  principalId  String
+  resource     String // resource kind
+  resourceId   String?
+  action       String
+  decision     Boolean // allow/deny
+  effect       String // "ALLOW" | "DENY"
+  reason       String?  @db.Text // hvilken regel matcha
+  matchedRules Json? // hvilke regler som matcha
+  latencyMs    Int?
+  metadata     Json? // request metadata
+  createdAt    DateTime @default(now())
+
+  @@index([principalId])
+  @@index([resource])
+  @@index([action])
+  @@index([decision])
+  @@index([createdAt])
+  @@index([policyId])
+  @@map("policy_evaluations")
+}
+
+// ============================================
+// OBSERVABILITY MODULE
+// ============================================
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  actorId       String?
+  actorRole     SystemRole? // Legacy role enum
+  action        String // e.g. "user.create", "project.update"
+  target        String? // resource ID
+  resource      String? // resource type (e.g. "project", "user")
+  decision      String? // "ALLOW" | "DENY" (for policy evaluations)
+  reason        String?     @db.Text // decision reasoning
+  meta          Json? // additional metadata
+  ip            String?
+  userAgent     String?
+  correlationId String? // for request correlation
+  createdAt     DateTime    @default(now())
+
+  // Optional relation to user
+  actor User? @relation(fields: [actorId], references: [id])
+
+  @@index([actorId])
+  @@index([action])
+  @@index([createdAt])
+  @@index([resource])
+  @@index([decision])
+  @@index([correlationId])
+  @@map("audit_logs")
+}
+
+// ============================================
+// KNOWLEDGE BASE MODULE (RAG)
+// ============================================
+
+model KnowledgeDocument {
+  id        String   @id @default(cuid())
+  title     String
+  source    String? // "pdf", "mdx", "repo", "url"
+  path      String? // filsti eller URL
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chunks KnowledgeChunk[]
+
+  @@index([source])
+  @@index([createdAt])
+  @@map("knowledge_documents")
+}
+
+model KnowledgeChunk {
+  id         String            @id @default(cuid())
+  docId      String
+  doc        KnowledgeDocument @relation(fields: [docId], references: [id], onDelete: Cascade)
+  chunkIndex Int
+  content    String            @db.Text
+  tokens     Int               @default(0)
+  embedding  Bytes? // pgvector (råkolonne) - nullable for now, kan settes opp senere
+
+  @@index([docId, chunkIndex])
+  @@index([docId])
+  @@map("knowledge_chunks")
+}
+
+// ============================================
+// MODULE MANAGEMENT SYSTEM
+// ============================================
+
+enum ModuleSyncStatus {
+  PENDING
+  SYNCING
+  SYNCED
+  ERROR
+}
+
+enum ModuleBuildStatus {
+  UNKNOWN
+  PASSING
+  FAILING
+  PENDING
+}
+
+model Module {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "hansen-auth", "hansen-security"
+  displayName String // e.g., "Hansen Auth", "Hansen Security"
+  version     String  @default("1.0.0")
+  description String? @db.Text
+
+  // GitHub Integration
+  githubRepo   String? // e.g., "catohansen/hansen-auth"
+  githubUrl    String?
+  githubBranch String  @default("main")
+  autoSync     Boolean @default(true)
+  syncStrategy String  @default("subtree") // subtree, submodule, manual
+  webhookUrl   String?
+
+  // NPM Integration
+  npmPackage String? // e.g., "@hansen/auth"
+  npmScope   String  @default("@hansen")
+
+  // Sync Status
+  lastSynced    DateTime?
+  syncStatus    ModuleSyncStatus @default(PENDING)
+  lastSyncError String?          @db.Text
+
+  // GitHub Stats (cached)
+  githubStats    Json? // { stars, forks, issues, prs, lastRelease, watchers }
+  lastGitHubSync DateTime?
+
+  // NPM Stats (cached)
+  npmStats    Json? // { downloads, version, lastPublish, maintainers }
+  lastNpmSync DateTime?
+
+  // Health Monitoring
+  buildStatus  ModuleBuildStatus @default(UNKNOWN)
+  testCoverage Float? // 0-100
+  lastBuild    DateTime?
+  lastTest     DateTime?
+  lintStatus   String? // "passing" | "failing" | "pending"
+  lastLint     DateTime?
+
+  // Module Metadata
+  standalone  Boolean @default(true)
+  publishable Boolean @default(true)
+  license     String  @default("PROPRIETARY")
+  category    String? // "Security", "Business", "AI & Automation", etc.
+  status      String? // "Production Ready", "In Development", etc.
+
+  // Relations
+  dependencies   ModuleDependency[]  @relation("Dependencies")
+  dependents     ModuleDependency[]  @relation("Dependents")
+  releases       ModuleRelease[]
+  syncHistory    ModuleSync[]
+  healthChecks   ModuleHealthCheck[]
+  githubWebhooks GitHubWebhook[]     @relation("GitHubWebhooks")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([githubRepo])
+  @@index([npmPackage])
+  @@index([syncStatus])
+  @@index([buildStatus])
+  @@index([category])
+  @@map("modules")
+}
+
+model ModuleDependency {
+  id          String   @id @default(cuid())
+  moduleId    String
+  module      Module   @relation("Dependencies", fields: [moduleId], references: [id], onDelete: Cascade)
+  dependsOnId String
+  dependsOn   Module   @relation("Dependents", fields: [dependsOnId], references: [id], onDelete: Cascade)
+  version     String // Version constraint, e.g., "^1.0.0", "~1.2.3"
+  type        String   @default("runtime") // runtime, dev, peer, optional
+  createdAt   DateTime @default(now())
+
+  @@unique([moduleId, dependsOnId, type])
+  @@index([moduleId])
+  @@index([dependsOnId])
+  @@map("module_dependencies")
+}
+
+model ModuleRelease {
+  id          String    @id @default(cuid())
+  moduleId    String
+  module      Module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  version     String // e.g., "1.0.0"
+  tag         String    @unique // e.g., "v1.0.0"
+  changelog   String?   @db.Text
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+
+  // Release Metadata
+  githubReleaseId String? // GitHub release ID
+  npmVersion      String? // NPM version published
+  releaseNotes    String? @db.Text
+
+  // Relations
+  createdById String?
+  createdBy   User?   @relation("ModuleReleaseCreator", fields: [createdById], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([moduleId])
+  @@index([version])
+  @@index([published])
+  @@map("module_releases")
+}
+
+model ModuleSync {
+  id        String @id @default(cuid())
+  moduleId  String
+  module    Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  direction String // "to-github" | "from-github" | "bidirectional"
+  status    String // "success" | "error" | "pending"
+
+  // Sync Details
+  changes   Json? // What changed (files, commits, etc.)
+  commitSha String? // Last commit synced
+  branch    String? // Branch synced
+  error     String? @db.Text
+
+  // Metadata
+  syncedBy    String? // User ID or "automated" or "github-webhook"
+  duration    Int? // Sync duration in milliseconds
+  filesSynced Int? // Number of files synced
+
+  createdAt DateTime @default(now())
+
+  @@index([moduleId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("module_syncs")
+}
+
+model ModuleHealthCheck {
+  id       String @id @default(cuid())
+  moduleId String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  // Health Metrics
+  buildPassing Boolean @default(false)
+  testsPassing Boolean @default(false)
+  lintPassing  Boolean @default(false)
+  coverage     Float? // 0-100
+
+  // Dependency Health
+  dependenciesOutdated Int @default(0)
+  vulnerabilities      Int @default(0)
+
+  // Performance
+  buildTime  Int? // Build time in milliseconds
+  testTime   Int? // Test time in milliseconds
+  bundleSize Int? // Bundle size in bytes
+
+  // Quality
+  codeQuality Json? // { maintainability, security, reliability }
+
+  checkedAt DateTime @default(now())
+
+  @@index([moduleId])
+  @@index([checkedAt])
+  @@map("module_health_checks")
+}
+
+// ============================================
+// GITHUB WEBHOOK INTEGRATION
+// ============================================
+
+model GitHubWebhook {
+  id            String               @id @default(cuid())
+  moduleId      String?
+  module        Module?              @relation("GitHubWebhooks", fields: [moduleId], references: [id], onDelete: Cascade)
+  webhookEvents GitHubWebhookEvent[]
+
+  // Webhook Configuration
+  name   String
+  url    String
+  secret String? // HMAC secret for verification
+  events String[] // GitHub webhook events
+
+  // Status
+  active        Boolean   @default(true)
+  lastTriggered DateTime?
+  triggerCount  Int       @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([moduleId])
+  @@index([active])
+  @@map("github_webhooks")
+}
+
+model GitHubWebhookEvent {
+  id        String        @id @default(cuid())
+  webhookId String
+  webhook   GitHubWebhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  // Event Data
+  eventType String // "push", "release", "pull_request", etc.
+  payload   Json // Full GitHub webhook payload
+  signature String? // HMAC signature for verification
+
+  // Processing
+  processed   Boolean   @default(false)
+  processedAt DateTime?
+  error       String?   @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([webhookId])
+  @@index([eventType])
+  @@index([processed])
+  @@index([createdAt])
+  @@map("github_webhook_events")
+}
+
+// ============================================
+// ONBOARDING ANALYTICS
+// ============================================
+
+model DeploymentConfig {
+  id   String @id @default(cuid())
+  name String @default("Production") // Config name (e.g., "Production", "Staging")
+
+  // FTP Configuration
+  ftpServer    String  @default("ftp.domeneshop.no")
+  ftpUsername  String
+  ftpPassword  String // Encrypted password
+  ftpServerDir String  @default("/www")
+  protocol     String? @default("ftp") // "ftp" or "sftp"
+
+  // Database Configuration (optional)
+  dbHost     String?
+  dbUsername String?
+  dbPassword String? // Encrypted password
+  dbName     String?
+  dbPort     Int?    @default(3306) // MySQL default (Domeneshop uses MySQL)
+  dbType     String? @default("mysql") // "mysql" or "postgresql"
+
+  // Server Configuration
+  serverUrl      String? // e.g., "https://www.domenehsop.no"
+  buildOutputDir String  @default("out")
+
+  // Status
+  lastSyncAt     DateTime?
+  lastSyncStatus String? // "success", "failed", "pending"
+  lastSyncError  String?   @db.Text
+
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  DeploymentHistory DeploymentHistory[]
+
+  @@index([name])
+  @@map("deployment_configs")
+}
+
+model DeploymentHistory {
+  id       String            @id @default(cuid())
+  configId String?
+  config   DeploymentConfig? @relation(fields: [configId], references: [id], onDelete: SetNull)
+
+  status String // "success", "failed", "pending", "building", "uploading"
+  step   String? // "build", "ftp", "database", "complete"
+
+  // Build Info
+  buildDuration Int? // Duration in seconds
+  buildOutput   String? @db.Text
+
+  // FTP Info
+  ftpDuration   Int?
+  filesUploaded Int?
+  filesCount    Int?
+
+  // Database Sync Info
+  dbSyncDuration Int?
+  dbSyncTables   String[] // Array of synced table names
+
+  // URLs and References
+  deployedUrl String?
+  commitHash  String?
+  branch      String?
+  version     String?
+
+  error    String? @db.Text
+  metadata Json? // Additional deployment metadata
+
+  startedAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  createdById String?
+  createdBy   User?   @relation("DeploymentCreator", fields: [createdById], references: [id])
+
+  @@index([configId])
+  @@index([status])
+  @@index([startedAt])
+  @@index([createdById])
+  @@map("deployment_history")
+}
+
+model OnboardingAnalytics {
+  id        String   @id @default(cuid())
+  userId    String?
+  sessionId String
+  step      Int // Current onboarding step (1-4)
+  action    String // "start", "complete", "abandon", "error", "next", "prev", "field_validate"
+  field     String? // Field name if action is field_validate or error
+  errorCode String? // Error code if action is error
+  duration  Int? // Time spent in milliseconds
+  metadata  Json? // Additional context (moduleInfo, validation results, etc.)
+  timestamp DateTime @default(now())
+
+  @@index([userId])
+  @@index([sessionId])
+  @@index([step])
+  @@index([action])
+  @@index([timestamp])
+  @@map("onboarding_analytics")
+}
+
+model SystemConfig {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text // JSON string
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+  @@map("system_config")
+}

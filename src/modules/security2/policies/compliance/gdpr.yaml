@@ -1,0 +1,68 @@
+# GDPR Compliance Policy Templates
+# General Data Protection Regulation
+
+# Data Subject Access Rights (Article 15)
+resource: "personal_data"
+actions: ["read", "export"]
+roles: ["OWNER", "ADMIN", "DATA_SUBJECT"]
+effect: "ALLOW"
+conditions:
+  - "principal.id == resource.attributes.ownerId OR principal.roles.includes('OWNER')"
+reason: "GDPR Article 15: Right of access by the data subject"
+compliance:
+  framework: "GDPR"
+  article: "15"
+  category: "Data Subject Rights"
+
+# Right to Erasure (Article 17)
+resource: "personal_data"
+actions: ["delete"]
+roles: ["OWNER", "ADMIN", "DATA_SUBJECT"]
+effect: "ALLOW"
+conditions:
+  - "principal.id == resource.attributes.ownerId OR principal.roles.includes('OWNER')"
+reason: "GDPR Article 17: Right to erasure ('right to be forgotten')"
+compliance:
+  framework: "GDPR"
+  article: "17"
+  category: "Data Subject Rights"
+
+# Data Processing (Article 6)
+resource: "data_processing"
+actions: ["process", "store", "transfer"]
+roles: ["OWNER", "ADMIN", "DATA_PROCESSOR"]
+effect: "ALLOW"
+conditions:
+  - "resource.attributes.consent == true OR resource.attributes.legalBasis == 'contract'"
+reason: "GDPR Article 6: Lawfulness of processing"
+compliance:
+  framework: "GDPR"
+  article: "6"
+  category: "Principles"
+
+# Data Breach Notification (Article 33)
+resource: "data_breach"
+actions: ["report", "notify", "manage"]
+roles: ["OWNER", "ADMIN", "DATA_PROTECTION_OFFICER"]
+effect: "ALLOW"
+reason: "GDPR Article 33: Notification of a personal data breach to the supervisory authority"
+compliance:
+  framework: "GDPR"
+  article: "33"
+  category: "Data Breach"
+
+# Processing Security (Article 32)
+resource: "data_security"
+actions: ["encrypt", "anonymize", "pseudonymize"]
+roles: ["OWNER", "ADMIN", "DATA_PROTECTION_OFFICER"]
+effect: "ALLOW"
+reason: "GDPR Article 32: Security of processing"
+compliance:
+  framework: "GDPR"
+  article: "32"
+  category: "Security"
+
+
+
+
+

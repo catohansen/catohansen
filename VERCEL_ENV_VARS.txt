@@ -1,0 +1,44 @@
+# VERCEL ENVIRONMENT VARIABLES
+# Kopier disse til Vercel Dashboard → Settings → Environment Variables
+# Dato: 2025-11-05
+
+# === CRITICAL (Must Have) ===
+
+# Database (Fra Neon - opprett først på neon.tech)
+DATABASE_URL=postgresql://user:password@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=require
+
+# AI Provider (Skaff fra platform.openai.com/api-keys - legg til $5-10 credit)
+OPENAI_API_KEY=sk-proj-din-key-her
+NORA_AI_PROVIDER=openai
+OPENAI_MODEL=gpt-4o-mini
+EMBEDDING_PROVIDER=openai
+
+# App URL
+NEXT_PUBLIC_URL=https://catohansen.vercel.app
+NODE_ENV=production
+
+# Security Secrets (Generer nye med: openssl rand -base64 32)
+NEXTAUTH_SECRET=generer-ny-random-secret-32-bytes
+JWT_SECRET=generer-ny-jwt-secret-32-bytes
+
+# === OPTIONAL (Can Add Later) ===
+
+# Stripe (Når klar for betalinger)
+# STRIPE_SECRET_KEY=sk_live_...
+# STRIPE_PUBLISHABLE_KEY=pk_live_...
+# STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Sentry (Valgfritt - error tracking)
+# SENTRY_DSN=https://...@sentry.io/...
+
+# Google AI (Hvis vil bytte tilbake fra OpenAI)
+# GOOGLE_AI_API_KEY=AIzaSyAaWnqF0fH_x3mOo-S5XhifO1SobW0KKvE
+# GOOGLE_AI_MODEL=models/gemini-2.0-flash
+# NORA_AI_PROVIDER=google
+
+# === NOTES ===
+# - Alle secrets må være nye (ikke bruk dev-secrets i prod)
+# - DATABASE_URL må være fra Neon/Supabase (prod database)
+# - OPENAI_API_KEY må ha credit ($5-10)
+# - Custom domain oppdaterer NEXT_PUBLIC_URL til https://catohansen.no
+

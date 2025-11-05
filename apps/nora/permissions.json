@@ -1,0 +1,88 @@
+{
+  "version": "1.0.0",
+  "description": "Nora permissions and module access control",
+  "lastUpdated": "2025-01-16",
+  
+  "modules": {
+    "hansen-security": {
+      "enabled": true,
+      "permissions": ["read", "policy-check", "audit-view"],
+      "restrictions": ["no-write-policies", "no-delete"]
+    },
+    "user-management": {
+      "enabled": true,
+      "permissions": ["read", "list-users", "view-roles"],
+      "restrictions": ["no-delete-users", "no-password-reset"]
+    },
+    "client-management": {
+      "enabled": true,
+      "permissions": ["read", "list-clients", "view-pipelines"],
+      "restrictions": ["no-delete-clients", "no-financial-data"]
+    },
+    "content-management": {
+      "enabled": true,
+      "permissions": ["read", "list-pages", "view-media"],
+      "restrictions": ["no-publish", "no-delete"]
+    },
+    "project-management": {
+      "enabled": true,
+      "permissions": ["read", "list-projects", "view-status"],
+      "restrictions": ["no-create", "no-delete"]
+    },
+    "billing-system": {
+      "enabled": false,
+      "permissions": [],
+      "restrictions": ["no-access"]
+    },
+    "analytics": {
+      "enabled": true,
+      "permissions": ["read", "view-stats", "view-reports"],
+      "restrictions": ["no-export", "no-delete"]
+    },
+    "knowledge-base": {
+      "enabled": true,
+      "permissions": ["read", "search", "view-documents"],
+      "restrictions": ["no-delete", "no-modify"]
+    }
+  },
+  
+  "actions": {
+    "automation": {
+      "create-task": true,
+      "run-script": false,
+      "send-email": false,
+      "create-file": false,
+      "modify-code": false
+    },
+    "system": {
+      "restart-services": false,
+      "view-logs": true,
+      "view-status": true,
+      "modify-config": false
+    }
+  },
+  
+  "voice": {
+    "enabled": true,
+    "requires-user-approval": true,
+    "save-audio": false,
+    "transcribe-only": true
+  },
+  
+  "memory": {
+    "save-user-context": true,
+    "save-system-knowledge": true,
+    "share-across-projects": false,
+    "retention-days": 90
+  },
+  
+  "security": {
+    "api-key-required": true,
+    "rate-limiting": true,
+    "audit-all-actions": true,
+    "encrypt-sensitive-data": true
+  }
+}
+
+
+

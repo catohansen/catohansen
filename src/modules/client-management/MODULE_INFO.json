@@ -1,0 +1,144 @@
+{
+  "id": "client-management",
+  "name": "Hansen CRM",
+  "version": "1.0.0",
+  "description": "Verdens beste CRM-system med AI-drevne innsikter, salgsautomatisering og enterprise-grad sikkerhet. Modulær løsning som kan selges som standalone produkt eller integreres med andre Hansen-moduler.",
+  "author": "Cato Hansen <cato@catohansen.no>",
+  "license": "PROPRIETARY",
+  "standalone": true,
+  "publishable": true,
+  "category": "Business",
+  "status": "Production Ready",
+  "features": [
+    "Kontaktstyring",
+    "Lead Management med AI Scoring v2",
+    "Sales Pipeline Tracking",
+    "Communication Logger",
+    "360° Customer View",
+    "AI-drevne Innskter",
+    "Sales Forecasting",
+    "Automation Engine (vår egen)",
+    "Task Management System",
+    "Document Management System",
+    "Advanced Reporting Engine",
+    "AI Insights Engine",
+    "Predictive Analytics",
+    "Multi-tenant Support",
+    "Enterprise Security (Hansen Security)",
+    "REST API",
+    "TypeScript SDK"
+  ],
+  "technologies": [
+    "TypeScript",
+    "Next.js",
+    "Prisma",
+    "PostgreSQL",
+    "Hansen Security"
+  ],
+  "api": {
+    "baseUrl": "/api/modules/client-management",
+    "endpoints": [
+      "/clients",
+      "/clients/[id]",
+      "/clients/stats",
+      "/leads",
+      "/leads/[id]",
+      "/leads/convert/[id]",
+      "/leads/stats",
+      "/pipelines",
+      "/pipelines/[id]",
+      "/pipelines/stages",
+      "/pipelines/forecast",
+      "/communications",
+      "/communications/[id]",
+      "/communications/stats",
+      "/clients/[id]/timeline",
+      "/leads/[id]/advanced-score",
+      "/tasks",
+      "/tasks/[id]",
+      "/tasks/stats",
+      "/documents",
+      "/documents/[id]",
+      "/documents/generate",
+      "/reports",
+      "/reports/[id]",
+      "/ai-insights/recommendations",
+      "/ai-insights/predictions"
+    ],
+    "sdk": "@hansen-crm/sdk"
+  },
+  "pricing": {
+    "type": "product",
+    "plans": [
+      {
+        "name": "Free",
+        "price": 0,
+        "currency": "NOK",
+        "features": [
+          "Up to 100 clients",
+          "Basic lead management",
+          "Pipeline tracking"
+        ]
+      },
+      {
+        "name": "Starter",
+        "price": 499,
+        "currency": "NOK",
+        "period": "monthly",
+        "features": [
+          "Up to 1,000 clients",
+          "AI lead scoring",
+          "Advanced pipeline",
+          "Communication logs",
+          "Email support"
+        ]
+      },
+      {
+        "name": "Professional",
+        "price": 1999,
+        "currency": "NOK",
+        "period": "monthly",
+        "features": [
+          "Unlimited clients",
+          "AI-powered insights",
+          "Sales forecasting",
+          "Advanced analytics",
+          "Priority support",
+          "Custom integrations"
+        ]
+      },
+      {
+        "name": "Enterprise",
+        "price": "custom",
+        "currency": "NOK",
+        "features": [
+          "Everything in Professional",
+          "Multi-tenant support",
+          "White-label option",
+          "Dedicated support",
+          "Custom development",
+          "SLA guarantee"
+        ]
+      }
+    ]
+  },
+  "documentation": {
+    "readme": "README.md",
+    "api": "https://docs.catohansen.no/crm/api",
+    "guides": "https://docs.catohansen.no/crm/guides"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catohansen/hansen-crm"
+  },
+  "keywords": [
+    "crm",
+    "customer-relationship-management",
+    "sales",
+    "pipeline",
+    "lead-management",
+    "enterprise",
+    "ai-powered"
+  ]
+}
+

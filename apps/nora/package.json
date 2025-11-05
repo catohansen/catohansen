@@ -1,0 +1,52 @@
+{
+  "name": "@hansen-global/nora",
+  "version": "1.0.0",
+  "description": "Nora - AI Kjerneintelligens for Hansen Global. The Mind Behind Hansen Global.",
+  "author": "Cato Hansen <cato@catohansen.no>",
+  "license": "PROPRIETARY",
+  "private": true,
+  "main": "./core/system-orchestrator.ts",
+  "types": "./core/system-orchestrator.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "openai": "^6.7.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "langchain": "^0.1.0",
+    "@langchain/core": "^0.1.0",
+    "socket.io": "^4.5.4",
+    "@huggingface/inference": "^2.6.0",
+    "zod": "^4.1.12",
+    "framer-motion": "^10.16.0",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.24",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "next": "^14.0.0"
+  },
+  "keywords": [
+    "nora",
+    "ai",
+    "assistant",
+    "hansen-global",
+    "system-architect",
+    "knowledge-base",
+    "automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catohansen/catohansen-online",
+    "directory": "apps/nora"
+  }
+}
+
+
+

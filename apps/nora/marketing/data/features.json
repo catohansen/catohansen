@@ -1,0 +1,111 @@
+{
+  "features": [
+    {
+      "id": "memory",
+      "title": "Memory Engine",
+      "icon": "💾",
+      "description": "Langtidshukommelse med semantisk søk. Nora husker kontekst, preferanser og historikk på tvers av samtaler.",
+      "details": [
+        "Vector embeddings for semantisk søk",
+        "Temporal decay (minner svekkes naturlig over tid)",
+        "Batch operations (50+ minner samtidig)",
+        "User-specific memory isolation",
+        "Cache system for raskere søk"
+      ]
+    },
+    {
+      "id": "emotion",
+      "title": "Emotion Engine",
+      "icon": "💞",
+      "description": "Følelsesintelligent AI som forstår tone, tilpasser svar og gir visuell feedback basert på følelser.",
+      "details": [
+        "Emotion detection via OpenAI GPT-4",
+        "Dynamisk tonejustering",
+        "Visuell feedback (farger, emoji, puls)",
+        "Emosjonell læring over tid",
+        "Empatiske og menneskelige svar"
+      ]
+    },
+    {
+      "id": "voice",
+      "title": "Voice Engine",
+      "icon": "🎙",
+      "description": "Stemmeinput og -output med Whisper og ElevenLabs. Nora snakker med varme og følelse.",
+      "details": [
+        "Whisper speech-to-text",
+        "ElevenLabs voice output",
+        "Voice → Emotion sync",
+        "Multilingual support (NO/EN)",
+        "Encrypted voice data (AES-256)"
+      ]
+    },
+    {
+      "id": "orchestrator",
+      "title": "System Orchestrator",
+      "icon": "⚙️",
+      "description": "Kjernen som koordinerer alle Nora-systemer. Intelligent task scheduling og automatisk feilhåndtering.",
+      "details": [
+        "Multi-agent orchestration",
+        "Task decomposition og prioritet",
+        "Automatic error recovery",
+        "Heartbeat monitoring",
+        "Global event bus"
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Security & Privacy",
+      "icon": "🔐",
+      "description": "Integrert med Hansen Security RBAC/ABAC. Kryptert data, audit logging og session monitoring.",
+      "details": [
+        "Hansen Security RBAC/ABAC",
+        "BetterAuth 2FA + Magic Link",
+        "JWT token validation",
+        "Encrypted voice data",
+        "Suspicious behavior detection"
+      ]
+    },
+    {
+      "id": "automation",
+      "title": "Automation Engine",
+      "icon": "🤖",
+      "description": "Automatiser oppgaver på tvers av systemer. Gmail, Notion, Trello og mer.",
+      "details": [
+        "Multi-platform automation",
+        "Scheduled events (cron-style)",
+        "Conditional triggers",
+        "Integration with Zapier/Webhooks",
+        "Action reporting"
+      ]
+    }
+  ],
+  "integrations": [
+    {
+      "id": "pengeplan",
+      "name": "Pengeplan 2.0",
+      "logo": "/images/integrations/pengeplan.svg",
+      "description": "Økonomistyringssystem"
+    },
+    {
+      "id": "resilient13",
+      "name": "Resilient13",
+      "logo": "/images/integrations/resilient13.svg",
+      "description": "Velvære og vekstsystem"
+    },
+    {
+      "id": "hansen-security",
+      "name": "Hansen Security",
+      "logo": "/images/integrations/hansen-security.svg",
+      "description": "Authorization engine"
+    },
+    {
+      "id": "hansen-hub",
+      "name": "Hansen Hub",
+      "logo": "/images/integrations/hansen-hub.svg",
+      "description": "Modul-hub"
+    }
+  ]
+}
+
+
+

@@ -1,0 +1,109 @@
+{
+  "id": "nora",
+  "name": "Nora AI",
+  "displayName": "Nora AI",
+  "version": "2.0.0",
+  "description": "Revolutionær AI-assistent for Hansen Global Platform. Mye mer avansert enn Siri, Alexa og Google Assistant. Intelligent, emosjonell og levende AI-assistent bygget for ekte samarbeid.",
+  "author": "Cato Hansen",
+  "contact": "cato@catohansen.no",
+  "license": "PROPRIETARY",
+  "copyright": "© 2025 Cato Hansen. All rights reserved.",
+  "standalone": true,
+  "publishable": true,
+  "category": "AI & Automation",
+  "status": "Production Ready",
+  "active": true,
+  "link": "/modules/nora",
+  "adminLink": "/admin/nora/dashboard",
+  "apiLink": "/api/v1/modules/nora",
+  "icon": "Brain",
+  "color": "from-purple-500 to-pink-500",
+  "badge": "Revolutionary",
+  "revolutionary": {
+    "magicEngine": true,
+    "multiModalIntelligence": true,
+    "universalSystemController": true,
+    "advancedLearning": true,
+    "proactiveProblemSolver": true,
+    "creativeSolutions": true
+  },
+  "personality": {
+    "tone": "calm, wise, friendly, analytical, sharp",
+    "voice": "professional but approachable",
+    "language": "Norwegian Bokmål",
+    "responseStyle": "helpful, detailed, context-aware"
+  },
+  "capabilities": {
+    "systemArchitect": true,
+    "knowledgeBase": true,
+    "automation": true,
+    "aiChat": true,
+    "logger": true,
+    "systemCreator": true,
+    "voice": true,
+    "marketing": true,
+    "magicCreator": true,
+    "problemSolver": true,
+    "systemFixer": true,
+    "advancedLearner": true,
+    "proactiveHelper": true,
+    "creativeGenerator": true,
+    "universalController": true
+  },
+  "integrations": {
+    "hansen-security": true,
+    "user-management": true,
+    "client-management": true,
+    "ai-agents": true,
+    "content-management": true,
+    "project-management": true,
+    "billing-system": true,
+    "analytics": true
+  },
+  "permissions": {
+    "read": ["all"],
+    "write": ["knowledge-base", "logs", "automation"],
+    "admin": ["system-orchestration", "module-creation"]
+  },
+  "voice": {
+    "enabled": true,
+    "requiresPermission": true,
+    "ttsProvider": "elevenlabs",
+    "sttProvider": "openai-whisper"
+  },
+  "features": [
+    "Memory Engine",
+    "Emotion Engine",
+    "Voice Engine",
+    "System Orchestrator",
+    "Security & Auth",
+    "Automation Engine"
+  ],
+  "pricing": {
+    "type": "product",
+    "plans": [
+      {
+        "name": "Free",
+        "price": 0,
+        "features": ["Basic chat", "Limited memory", "Standard responses"]
+      },
+      {
+        "name": "Starter",
+        "price": 499,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Full chat", "Extended memory", "Voice input/output"]
+      },
+      {
+        "name": "Professional",
+        "price": 1999,
+        "currency": "NOK",
+        "period": "month",
+        "features": ["Everything in Starter", "Advanced AI", "Custom integrations", "Priority support"]
+      }
+    ]
+  }
+}
+
+
+

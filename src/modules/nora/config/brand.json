@@ -1,0 +1,38 @@
+{
+  "name": "Nora",
+  "fullName": "Neural Operations & Reasoning Assistant",
+  "tagline": "The Mind Behind Hansen Global",
+  "version": "2.0.0",
+  "author": "Cato Hansen",
+  "contact": "cato@catohansen.no",
+  "website": "www.catohansen.no",
+  "colors": {
+    "primary": "#7A5FFF",
+    "secondary": "#C6A0FF",
+    "accent": "#00FFC2",
+    "background": "#0E0E16",
+    "surface": "#171721",
+    "border": "#24243A",
+    "muted": "#2A2A3C",
+    "text": "#FFFFFF",
+    "textSecondary": "#9CA3AF"
+  },
+  "typography": {
+    "primary": "Inter",
+    "secondary": "Satoshi"
+  },
+  "style": {
+    "theme": "neon-clean",
+    "mood": "minimalist-sci-fi",
+    "glow": true,
+    "rounded": "2xl"
+  },
+  "branding": {
+    "logo": "/assets/nora-logo.svg",
+    "avatar": "/assets/nora-avatar.glb",
+    "heroVideo": "/assets/background-hero.webm"
+  },
+  "license": "PROPRIETARY",
+  "copyright": "© 2025 Cato Hansen. All rights reserved."
+}
+

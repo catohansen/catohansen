@@ -1,0 +1,52 @@
+{
+  "name": "@hansenglobal/nora",
+  "version": "2.0.2",
+  "description": "Nora - The Living Mind Behind Hansen Global. Revolutionary AI SDK that's more advanced than Siri, Alexa, and Google Assistant.",
+  "author": "Cato Hansen <cato@catohansen.no>",
+  "license": "PROPRIETARY",
+  "private": false,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "require": "./index.ts",
+      "types": "./index.ts"
+    }
+  },
+  "files": [
+    "index.ts",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "keywords": [
+    "nora",
+    "ai",
+    "assistant",
+    "artificial-intelligence",
+    "chat",
+    "memory",
+    "emotion",
+    "voice",
+    "automation",
+    "hansen-global",
+    "sdk",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/catohansen/catohansen-online",
+    "directory": "apps/nora/sdk"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
+
