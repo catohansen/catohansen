@@ -1,0 +1,76 @@
+# VERCEL ENVIRONMENT VARIABLES - KOMPLETT LISTE
+# Kopier disse til Vercel Dashboard → Settings → Environment Variables
+# Dato: 2025-01-16
+# Prosjekt: catohansen
+
+# ============================================
+# 🔴 CRITICAL - MÅ HA (Production, Preview, Development)
+# ============================================
+
+# Database (Fra Neon - allerede opprettet)
+DATABASE_URL=postgresql://neondb_owner:npg_SZuU5x8wqAcl@ep-snowy-base-ag874ph7-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+
+# App Configuration
+NEXT_PUBLIC_URL=https://catohansen.vercel.app
+NODE_ENV=production
+
+# Security Secrets (Generer nye med: npm run generate:secrets)
+# ⚠️  VIKTIG: Bruk verdiene fra npm run generate:secrets output
+NEXTAUTH_SECRET=KOPIER_FRA_GENERATE_SECRETS_OUTPUT
+JWT_SECRET=KOPIER_FRA_GENERATE_SECRETS_OUTPUT
+
+# ============================================
+# 🤖 AI Provider (OpenAI) - MÅ HA
+# ============================================
+
+# OpenAI API Key (Skaff fra platform.openai.com/api-keys)
+# ⚠️  VIKTIG: Legg til $5-10 credit på OpenAI konto
+OPENAI_API_KEY=sk-proj-DIN-KEY-HER
+
+# AI Configuration
+NORA_AI_PROVIDER=openai
+OPENAI_MODEL=gpt-4o-mini
+EMBEDDING_PROVIDER=openai
+
+# ============================================
+# 💳 Stripe (Valgfritt - kan legges til senere)
+# ============================================
+
+# STRIPE_SECRET_KEY=sk_live_...
+# STRIPE_PUBLISHABLE_KEY=pk_live_...
+# STRIPE_WEBHOOK_SECRET=whsec_...
+
+# ============================================
+# 📊 Monitoring (Valgfritt)
+# ============================================
+
+# Sentry (Error tracking)
+# SENTRY_DSN=https://...@sentry.io/...
+
+# ============================================
+# 📝 INSTRUKSJONER
+# ============================================
+
+# 1. Kopier DATABASE_URL over (allerede fylt ut)
+# 2. Kjør: npm run generate:secrets
+# 3. Kopier NEXTAUTH_SECRET og JWT_SECRET fra output
+# 4. Skaff OpenAI API key fra platform.openai.com
+# 5. Legg til alle variabler i Vercel Dashboard
+# 6. Sett Environment til: Production, Preview, Development (huk av alle)
+# 7. Redeploy prosjektet
+
+# ============================================
+# ✅ CHECKLIST
+# ============================================
+
+# [ ] DATABASE_URL satt
+# [ ] NEXTAUTH_SECRET generert og satt
+# [ ] JWT_SECRET generert og satt
+# [ ] OPENAI_API_KEY satt (med credit)
+# [ ] NORA_AI_PROVIDER satt til openai
+# [ ] OPENAI_MODEL satt til gpt-4o-mini
+# [ ] EMBEDDING_PROVIDER satt til openai
+# [ ] NEXT_PUBLIC_URL satt
+# [ ] NODE_ENV satt til production
+# [ ] Alle variabler har Environment: Production, Preview, Development
+
