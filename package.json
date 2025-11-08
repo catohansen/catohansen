@@ -11,6 +11,8 @@
     "generate:secrets": "./scripts/generate-env-secrets.sh",
     "vercel:setup": "./scripts/vercel-setup.sh",
     "deploy:vercel": "./scripts/deploy-to-vercel.sh",
+    "fix:local": "./scripts/fix-local-complete.sh",
+    "fix:quick": "./scripts/fix-dev-server.sh",
     "dev": "prisma generate && next dev",
     "dev:3000": "prisma generate && PORT=3000 next dev",
     "dev:3001": "prisma generate && PORT=3001 next dev",
