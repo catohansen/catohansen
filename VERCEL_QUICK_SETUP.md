@@ -67,29 +67,22 @@ production
 ☑ Production ☑ Preview ☑ Development
 ```
 
-### AI (OpenAI):
+### AI (Google AI - Gratis!):
 ```
-OPENAI_API_KEY
-sk-proj-DIN-KEY-HER
+GOOGLE_AI_API_KEY
+AIzaSyAaWnqF0fH_x3mOo-S5XhifO1SobW0KKvE
 ☑ Production ☑ Preview ☑ Development
 ```
-⚠️  **VIKTIG:** Skaff key fra [platform.openai.com/api-keys](https://platform.openai.com/api-keys) og legg til $5-10 credit
+
+```
+GOOGLE_AI_MODEL
+gemini-1.5-flash-latest
+☑ Production ☑ Preview ☑ Development
+```
 
 ```
 NORA_AI_PROVIDER
-openai
-☑ Production ☑ Preview ☑ Development
-```
-
-```
-OPENAI_MODEL
-gpt-4o-mini
-☑ Production ☑ Preview ☑ Development
-```
-
-```
-EMBEDDING_PROVIDER
-openai
+google
 ☑ Production ☑ Preview ☑ Development
 ```
 
@@ -117,7 +110,7 @@ openai
 - **Build feiler:** Sjekk at alle environment variables er satt
 - **Database error:** Sjekk DATABASE_URL
 - **Login feiler:** Sjekk NEXTAUTH_SECRET og JWT_SECRET
-- **Nora ikke svarer:** Sjekk OPENAI_API_KEY har credit
+- **Nora ikke svarer:** Sjekk GOOGLE_AI_API_KEY er satt
 
 Se `docs/guides/VERCEL_DEPLOYMENT_COMPLETE.md` for detaljer.
 

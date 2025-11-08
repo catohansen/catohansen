@@ -19,17 +19,29 @@ NEXTAUTH_SECRET=oGuoxeUHAeQ4EIqBuULfG+mdTNMEXxkHSjfeEnRkOIc=
 JWT_SECRET=gsuRjolzUWmhZh5ODY36nJv+wUcBquH8i1AAVp/ta4A=
 
 # ============================================
-# 🤖 AI Provider (OpenAI) - MÅ HA
+# 🤖 AI Provider (Google AI) - GRATIS!
 # ============================================
 
-# OpenAI API Key (Skaff fra platform.openai.com/api-keys)
-# ⚠️  VIKTIG: Legg til $5-10 credit på OpenAI konto
-OPENAI_API_KEY=sk-proj-DIN-KEY-HER
+# Google AI API Key (Allerede konfigurert - gratis!)
+GOOGLE_AI_API_KEY=AIzaSyAaWnqF0fH_x3mOo-S5XhifO1SobW0KKvE
 
 # AI Configuration
-NORA_AI_PROVIDER=openai
-OPENAI_MODEL=gpt-4o-mini
-EMBEDDING_PROVIDER=openai
+GOOGLE_AI_MODEL=gemini-1.5-flash-latest
+NORA_AI_PROVIDER=google
+
+# ============================================
+# 🔑 OpenAI (Valgfritt - kun for embeddings/voice)
+# ============================================
+
+# Kun nødvendig hvis du vil ha:
+# - Embeddings (memory search) - ~$0.02 per 1000 søk
+# - Voice features (speech-to-text)
+# 
+# Hvis du vil bruke OpenAI i stedet for Google AI:
+# OPENAI_API_KEY=sk-proj-DIN-KEY-HER
+# NORA_AI_PROVIDER=openai
+# OPENAI_MODEL=gpt-4o-mini
+# EMBEDDING_PROVIDER=openai
 
 # ============================================
 # 💳 Stripe (Valgfritt - kan legges til senere)
@@ -51,24 +63,22 @@ EMBEDDING_PROVIDER=openai
 # ============================================
 
 # 1. Kopier DATABASE_URL over (allerede fylt ut)
-# 2. Kjør: npm run generate:secrets
-# 3. Kopier NEXTAUTH_SECRET og JWT_SECRET fra output
-# 4. Skaff OpenAI API key fra platform.openai.com
-# 5. Legg til alle variabler i Vercel Dashboard
-# 6. Sett Environment til: Production, Preview, Development (huk av alle)
-# 7. Redeploy prosjektet
+# 2. Secrets er allerede generert (NEXTAUTH_SECRET og JWT_SECRET)
+# 3. Google AI key er allerede konfigurert (gratis!)
+# 4. Legg til alle variabler i Vercel Dashboard
+# 5. Sett Environment til: Production, Preview, Development (huk av alle)
+# 6. Deploy prosjektet
 
 # ============================================
 # ✅ CHECKLIST
 # ============================================
 
 # [ ] DATABASE_URL satt
-# [ ] NEXTAUTH_SECRET generert og satt
-# [ ] JWT_SECRET generert og satt
-# [ ] OPENAI_API_KEY satt (med credit)
-# [ ] NORA_AI_PROVIDER satt til openai
-# [ ] OPENAI_MODEL satt til gpt-4o-mini
-# [ ] EMBEDDING_PROVIDER satt til openai
+# [ ] NEXTAUTH_SECRET satt (allerede generert)
+# [ ] JWT_SECRET satt (allerede generert)
+# [ ] GOOGLE_AI_API_KEY satt (allerede konfigurert)
+# [ ] GOOGLE_AI_MODEL satt til gemini-1.5-flash-latest
+# [ ] NORA_AI_PROVIDER satt til google
 # [ ] NEXT_PUBLIC_URL satt
 # [ ] NODE_ENV satt til production
 # [ ] Alle variabler har Environment: Production, Preview, Development

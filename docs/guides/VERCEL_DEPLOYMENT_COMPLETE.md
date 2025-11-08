@@ -114,38 +114,31 @@ Value: production
 Environment: ☑ Production ☑ Preview ☑ Development
 ```
 
-#### **AI Provider (OpenAI):**
+#### **AI Provider (Google AI - Gratis!):**
 
-**⚠️  VIKTIG:** Du må ha OpenAI API key med credit ($5-10)
-
-1. Gå til [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-2. Opprett ny API key
-3. Legg til credit ($5-10)
-4. Kopier key (starter med `sk-proj-`)
+**✅ Allerede konfigurert - ingen ekstra setup nødvendig!**
 
 ```
-Name: OPENAI_API_KEY
-Value: sk-proj-din-key-her
+Name: GOOGLE_AI_API_KEY
+Value: AIzaSyAaWnqF0fH_x3mOo-S5XhifO1SobW0KKvE
+Environment: ☑ Production ☑ Preview ☑ Development
+```
+
+```
+Name: GOOGLE_AI_MODEL
+Value: gemini-1.5-flash-latest
 Environment: ☑ Production ☑ Preview ☑ Development
 ```
 
 ```
 Name: NORA_AI_PROVIDER
-Value: openai
+Value: google
 Environment: ☑ Production ☑ Preview ☑ Development
 ```
 
-```
-Name: OPENAI_MODEL
-Value: gpt-4o-mini
-Environment: ☑ Production ☑ Preview ☑ Development
-```
-
-```
-Name: EMBEDDING_PROVIDER
-Value: openai
-Environment: ☑ Production ☑ Preview ☑ Development
-```
+**💡 Valgfritt - OpenAI (kun hvis du vil ha embeddings/voice):**
+- Kun nødvendig for memory search eller voice features
+- Se `VERCEL_ENV_VARS_COMPLETE.txt` for OpenAI setup (valgfritt)
 
 ### 2.3 Verifiser
 
@@ -155,10 +148,9 @@ Sjekk at alle variabler er lagt til:
 - [ ] JWT_SECRET
 - [ ] NEXT_PUBLIC_URL
 - [ ] NODE_ENV
-- [ ] OPENAI_API_KEY
+- [ ] GOOGLE_AI_API_KEY
+- [ ] GOOGLE_AI_MODEL
 - [ ] NORA_AI_PROVIDER
-- [ ] OPENAI_MODEL
-- [ ] EMBEDDING_PROVIDER
 
 ---
 
@@ -177,7 +169,7 @@ Sjekk at alle variabler er lagt til:
 3. Hvis build feiler, sjekk:
    - Environment variables er satt
    - DATABASE_URL er korrekt
-   - OpenAI API key har credit
+   - GOOGLE_AI_API_KEY er satt
 
 ### 3.3 Verifiser Deployment
 
@@ -247,11 +239,11 @@ Fix: Generer ny secret og sett i Vercel
 ### **Nora ikke svarer:**
 
 ```
-Problem: OPENAI_API_KEY mangler eller har ikke credit
+Problem: GOOGLE_AI_API_KEY mangler eller er feil
 Fix: 
-1. Sjekk at key er satt i Vercel
-2. Sjekk at key har credit på OpenAI
-3. Test key lokalt
+1. Sjekk at GOOGLE_AI_API_KEY er satt i Vercel
+2. Sjekk at NORA_AI_PROVIDER er satt til "google"
+3. Test lokalt med samme key
 ```
 
 ### **"Module not found" eller build errors:**
