@@ -9,6 +9,7 @@
     "setup:github": "./scripts/setup-github.sh",
     "setup:neon": "./scripts/setup-neon.sh",
     "generate:secrets": "./scripts/generate-env-secrets.sh",
+    "deploy:vercel": "./scripts/deploy-to-vercel.sh",
     "dev": "prisma generate && next dev",
     "dev:3000": "prisma generate && PORT=3000 next dev",
     "dev:3001": "prisma generate && PORT=3001 next dev",
