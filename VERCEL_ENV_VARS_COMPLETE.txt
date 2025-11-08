@@ -14,10 +14,9 @@ DATABASE_URL=postgresql://neondb_owner:npg_SZuU5x8wqAcl@ep-snowy-base-ag874ph7-p
 NEXT_PUBLIC_URL=https://catohansen.vercel.app
 NODE_ENV=production
 
-# Security Secrets (Generer nye med: npm run generate:secrets)
-# ⚠️  VIKTIG: Bruk verdiene fra npm run generate:secrets output
-NEXTAUTH_SECRET=KOPIER_FRA_GENERATE_SECRETS_OUTPUT
-JWT_SECRET=KOPIER_FRA_GENERATE_SECRETS_OUTPUT
+# Security Secrets (Generert 2025-01-16)
+NEXTAUTH_SECRET=oGuoxeUHAeQ4EIqBuULfG+mdTNMEXxkHSjfeEnRkOIc=
+JWT_SECRET=gsuRjolzUWmhZh5ODY36nJv+wUcBquH8i1AAVp/ta4A=
 
 # ============================================
 # 🤖 AI Provider (OpenAI) - MÅ HA
