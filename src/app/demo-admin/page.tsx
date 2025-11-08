@@ -624,7 +624,7 @@ export default function DemoAdminPage() {
               {/* CTA */}
               <div className="mt-8 pt-8 border-t border-pink-500/30 text-center">
                 <p className="text-slate-300 mb-6 text-lg">
-                  Ready to accelerate your development? Let's discuss how our modules can help your project.
+                  Ready to accelerate your development? Let&apos;s discuss how our modules can help your project.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <button

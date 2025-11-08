@@ -13,54 +13,45 @@
  */
 
 /**
- * Session API Route
- * Verify and get current session
+ * Session Renewal API Route
+ * Manually renew a session before it expires
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/modules/user-management/core/AuthEngine'
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get('auth-token')?.value ||
+    const token = request.cookies.get('auth-token')?.value || 
                   request.headers.get('authorization')?.replace('Bearer ', '')
 
     if (!token) {
       return NextResponse.json(
-        { valid: false },
+        { success: false, error: 'No session token provided' },
         { status: 401 }
       )
     }
 
-    // Get auto-renew option from query params
-    const searchParams = request.nextUrl.searchParams
-    const autoRenew = searchParams.get('autoRenew') !== 'false' // Default: true
-    const renewalThreshold = searchParams.get('renewalThreshold') 
-      ? parseInt(searchParams.get('renewalThreshold')!) 
-      : undefined
+    const body = await request.json().catch(() => ({}))
+    const { rememberMe } = body
 
-    const result = await auth.verifySession(token, {
-      autoRenew,
-      renewalThreshold,
-    })
+    const result = await auth.renewSession(token, rememberMe)
 
-    if (!result.valid) {
+    if (!result.success) {
       return NextResponse.json(
-        { valid: false },
+        result,
         { status: 401 }
       )
     }
 
     const response = NextResponse.json({
-      valid: true,
-      user: result.user,
+      success: true,
       session: result.session,
-      renewed: result.renewed || false,
     })
 
-    // Update cookie if session was auto-renewed
-    if (result.renewed && result.session) {
-      const maxAge = 60 * 60 * 24 * 7 // Default 7 days
+    // Update cookie expiry if session was renewed
+    if (result.session) {
+      const maxAge = rememberMe ? 60 * 60 * 24 * 30 : 60 * 60 * 24 * 7
       response.cookies.set('auth-token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
@@ -71,15 +62,12 @@ export async function GET(request: NextRequest) {
 
     return response
   } catch (error: any) {
-    console.error('Session verification error:', error)
+    console.error('Session renewal error:', error)
     return NextResponse.json(
-      { valid: false },
+      { success: false, error: 'An error occurred during session renewal' },
       { status: 500 }
     )
   }
 }
-
-
-
 
 

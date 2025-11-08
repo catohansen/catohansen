@@ -16,34 +16,21 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import Hero3D from '@/components/Hero3D';
+import Navigation from '@/components/Navigation';
 
-// Import komponenter med error handling
-const Navigation = dynamic(() => import('@/components/Navigation'), {
-  loading: () => <nav className="fixed top-0 w-full h-16 bg-white/80 backdrop-blur-sm z-50" />,
-  ssr: false,
+// Error boundary wrapper for each component
+const ParticlesBackground = dynamic(() => import('@/components/ParticlesBackground'), { 
+  ssr: false, 
+  loading: () => <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50" />
 });
 
-const Hero3D = dynamic(() => import('@/components/Hero3D'), {
-  loading: () => (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-slate-900">Laster...</h1>
-      </div>
-    </div>
-  ),
-  ssr: false,
+const FloatingElements = dynamic(() => import('@/components/FloatingElements'), { 
+  ssr: false, 
+  loading: () => null 
 });
 
-const ParticlesBackground = dynamic(() => import('@/components/ParticlesBackground'), {
-  ssr: false,
-  loading: () => <div className="fixed inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50" />,
-});
-
-const FloatingElements = dynamic(() => import('@/components/FloatingElements'), {
-  ssr: false,
-  loading: () => null,
-});
-
+// Lazy load komponenter som ikke trengs umiddelbart
 const StatsSection = dynamic(() => import('@/components/StatsSection'), {
   loading: () => <div className="h-32 bg-transparent" />,
 });
@@ -88,11 +75,7 @@ export default function Home() {
       </Suspense>
       
       <section id="hero" className="relative min-h-screen flex items-center justify-center z-10">
-        <Suspense fallback={
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-slate-900">Laster hero...</h1>
-          </div>
-        }>
+        <Suspense fallback={<div className="text-center"><h1 className="text-4xl font-bold">Laster...</h1></div>}>
           <Hero3D />
         </Suspense>
       </section>

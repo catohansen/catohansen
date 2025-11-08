@@ -180,7 +180,7 @@ export default function NoraLandingPage() {
           </p>
 
           <p className={`max-w-2xl mb-10 text-sm md:text-base ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Revolutionary AI that's more advanced than Siri, Alexa, and Google Assistant.
+            Revolutionary AI that&apos;s more advanced than Siri, Alexa, and Google Assistant.
             <br />
             Created in Drøbak, Norway — by System Architect Cato Hansen.
           </p>
@@ -311,7 +311,7 @@ export default function NoraLandingPage() {
           <p className={`max-w-2xl mx-auto leading-relaxed ${isDark ? 'text-gray-500' : 'text-gray-700'}`}>
             Nora is the result of years of system architecture expertise, AI innovation,
             and a deep understanding of how humans and machines can work together.
-            She's not just an AI assistant — she's the living mind behind the entire
+            She&apos;s not just an AI assistant — she&apos;s the living mind behind the entire
             Hansen Global ecosystem.
           </p>
         </motion.div>

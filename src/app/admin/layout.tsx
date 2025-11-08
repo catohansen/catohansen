@@ -179,7 +179,7 @@ export default function AdminLayout({
           <p className="text-gray-600 mb-2">Redirecting to login...</p>
           <p className="text-sm text-gray-500">
             <a href="/admin/login" className="text-purple-600 hover:underline font-semibold">
-              Click here if redirect doesn't work
+              Click here if redirect doesn&apos;t work
             </a>
           </p>
         </div>

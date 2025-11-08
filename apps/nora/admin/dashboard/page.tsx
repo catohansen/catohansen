@@ -42,7 +42,8 @@ import {
   RefreshCw,
   Sparkles
 } from 'lucide-react'
-import ParticleBackground from '@/components/shared/ParticleBackground'
+// Use relative import instead of path alias to avoid TypeScript errors
+import ParticleBackground from '../../ui/components/ParticleBackground'
 
 interface SystemStatus {
   system: string

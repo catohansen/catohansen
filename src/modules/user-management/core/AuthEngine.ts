@@ -422,9 +422,16 @@ export class AuthEngine {
   }
 
   /**
-   * Verify session
+   * Verify session with automatic renewal
+   * Automatically renews session if it's within renewal threshold (default: 25% of lifetime remaining)
    */
-  async verifySession(sessionToken: string): Promise<{
+  async verifySession(
+    sessionToken: string,
+    options?: {
+      autoRenew?: boolean
+      renewalThreshold?: number // Percentage of session lifetime remaining before renewal (default: 25%)
+    }
+  ): Promise<{
     valid: boolean
     session?: AuthSession
     user?: {
@@ -433,6 +440,7 @@ export class AuthEngine {
       name: string | null
       role: string
     }
+    renewed?: boolean
   }> {
     try {
       const session = await prisma.session.findUnique({
@@ -459,13 +467,37 @@ export class AuthEngine {
         return { valid: false }
       }
 
+      // Calculate session lifetime and time remaining
+      const now = new Date()
+      const sessionLifetime = session.expires.getTime() - session.createdAt.getTime()
+      const timeRemaining = session.expires.getTime() - now.getTime()
+      const renewalThreshold = options?.renewalThreshold ?? 25 // Default: renew when 25% of lifetime remains
+      const shouldRenew = options?.autoRenew !== false && 
+                         timeRemaining > 0 && 
+                         (timeRemaining / sessionLifetime) * 100 < renewalThreshold
+
+      let renewed = false
+
+      // Auto-renew session if needed
+      if (shouldRenew) {
+        const sessionDurationDays = this.config.session?.defaultAge || 7
+        const newExpiresAt = new Date(now.getTime() + sessionDurationDays * 24 * 60 * 60 * 1000)
+
+        await prisma.session.update({
+          where: { sessionToken },
+          data: { expires: newExpiresAt },
+        })
+
+        renewed = true
+      }
+
       return {
         valid: true,
         session: {
           id: session.id,
           userId: session.userId,
           token: session.sessionToken,
-          expiresAt: session.expires,
+          expiresAt: shouldRenew ? new Date(now.getTime() + (this.config.session?.defaultAge || 7) * 24 * 60 * 60 * 1000) : session.expires,
           createdAt: session.createdAt,
         },
         user: {
@@ -474,10 +506,72 @@ export class AuthEngine {
           name: session.user.name,
           role: session.user.role,
         },
+        renewed,
       }
     } catch (error) {
       console.error('AuthEngine.verifySession error:', error)
       return { valid: false }
+    }
+  }
+
+  /**
+   * Renew session manually
+   */
+  async renewSession(sessionToken: string, rememberMe?: boolean): Promise<{
+    success: boolean
+    session?: AuthSession
+    error?: string
+  }> {
+    try {
+      const session = await prisma.session.findUnique({
+        where: { sessionToken },
+        include: {
+          user: {
+            select: {
+              id: true,
+              status: true,
+            },
+          },
+        },
+      })
+
+      if (!session) {
+        return { success: false, error: 'Session not found' }
+      }
+
+      if (session.expires < new Date()) {
+        return { success: false, error: 'Session expired' }
+      }
+
+      if (session.user.status !== 'ACTIVE') {
+        return { success: false, error: 'User is not active' }
+      }
+
+      // Calculate new expiry based on rememberMe flag
+      const sessionDurationDays = rememberMe
+        ? this.config.session?.maxAge || 30
+        : this.config.session?.defaultAge || 7
+
+      const newExpiresAt = new Date(Date.now() + sessionDurationDays * 24 * 60 * 60 * 1000)
+
+      const updatedSession = await prisma.session.update({
+        where: { sessionToken },
+        data: { expires: newExpiresAt },
+      })
+
+      return {
+        success: true,
+        session: {
+          id: updatedSession.id,
+          userId: updatedSession.userId,
+          token: updatedSession.sessionToken,
+          expiresAt: updatedSession.expires,
+          createdAt: updatedSession.createdAt,
+        },
+      }
+    } catch (error) {
+      console.error('AuthEngine.renewSession error:', error)
+      return { success: false, error: 'Failed to renew session' }
     }
   }
 

@@ -7,6 +7,11 @@
   "private": true,
   "scripts": {
     "dev": "prisma generate && next dev",
+    "dev:3000": "prisma generate && PORT=3000 next dev",
+    "dev:3001": "prisma generate && PORT=3001 next dev",
+    "dev:3002": "prisma generate && PORT=3002 next dev",
+    "dev:4000": "prisma generate && PORT=4000 next dev",
+    "dev:5000": "prisma generate && PORT=5000 next dev",
     "dev:turbo": "prisma generate && next dev --turbo",
     "dev:poll": "WATCHPACK_POLLING=true prisma generate && next dev",
     "dev:turbo:clean": "NEXT_USE_TURBO=1 prisma generate && next dev --turbo",
@@ -40,6 +45,7 @@
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^6.0.0",
     "react-intersection-observer": "^9.5.2",
     "stripe": "^19.2.0",
     "tailwindcss": "^3.3.0"

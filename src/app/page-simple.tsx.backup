@@ -1,0 +1,34 @@
+/**
+ * Copyright (c) 2025 Cato Hansen. All rights reserved.
+ * 
+ * Proprietary - Unauthorized copying, modification, distribution, or use
+ * of this software, via any medium is strictly prohibited without express
+ * written permission from Cato Hansen.
+ * 
+ * @license PROPRIETARY
+ * SPDX-License-Identifier: PROPRIETARY
+ * @author Cato Hansen
+ * @contact cato@catohansen.no
+ * @website www.catohansen.no
+ */
+
+/**
+ * SIMPLE VERSION - For testing
+ * Backup of original page.tsx
+ */
+
+'use client';
+
+export default function Home() {
+  return (
+    <main style={{ padding: '2rem', textAlign: 'center' }}>
+      <h1>Cato Hansen</h1>
+      <p>Landing Page - Simple Version</p>
+      <p>If you can see this, the page is loading!</p>
+    </main>
+  );
+}
+
+
+
+
